@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {notifyRequestCreator} from "../../api/notify";
 import axios from "axios";
-import {ENTRY_POINT} from "../../constants";
+import {ENTRY_POINT, ENTRY_POINT_V} from "../../constants";
 
 interface IUser {
     id: number
@@ -31,7 +31,7 @@ export const signIn = createAsyncThunk(
     'user/signIn',
     async (param: any) => {
         const response = await notifyRequestCreator(Object.assign({}, param, {
-            url: `api/user/${param.url}`,
+            url: param.url,
             method: 'post'
         }))
         return response.data
@@ -41,7 +41,7 @@ export const signOut = createAsyncThunk(
     'user/signOut',
     async () => {
         const response = await notifyRequestCreator({
-            url: 'api/user/logout',
+            url: '/logout',
             method: 'post'
         })
         return response.data
@@ -50,7 +50,7 @@ export const signOut = createAsyncThunk(
 export const checkAuth = createAsyncThunk(
     'user/checkAuth',
     async () => {
-        const response = await axios.get(`${ENTRY_POINT}api/user/refresh`, {withCredentials: true})
+        const response = await axios.get(`${ENTRY_POINT}${ENTRY_POINT_V}/check_auth`, {withCredentials: true})
         return response.data
     }
 )
@@ -72,7 +72,7 @@ const userSlice = createSlice({
         },
         [signIn.rejected.type]: (state, action: PayloadAction<any>) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = action.payload || true;
         },
         [signOut.pending.type]: (state) => {
             state.loading = true;

@@ -1,9 +1,9 @@
 import axios from "axios";
-import {ENTRY_POINT} from "../constants";
+import {ENTRY_POINT, ENTRY_POINT_V} from "../constants";
 
 
 const $host = axios.create({
-    baseURL: ENTRY_POINT,
+    baseURL: ENTRY_POINT + ENTRY_POINT_V,
     withCredentials: true,
     headers: {"Access-Control-Allow-Origin": "*"}
 })
