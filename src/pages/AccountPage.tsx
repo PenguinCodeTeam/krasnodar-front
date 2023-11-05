@@ -5,7 +5,7 @@ const HomePage: React.FunctionComponent = () => {
 
     return (
         <StaticPage>
-            Страница с маршрутом и задачами для работника
+            Редактирование информации
         </StaticPage>
     )
 }

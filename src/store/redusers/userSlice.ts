@@ -3,16 +3,13 @@ import {notifyRequestCreator} from "../../api/notify";
 import axios from "axios";
 import {ENTRY_POINT, ENTRY_POINT_V} from "../../constants";
 
-interface IUser {
-    id: number
-    email: string
-    name: string
-    role: string
-}
 interface ResUser {
-    accessToken: string
-    refreshToken: string
-    user: IUser
+    access_token: string
+    name: string
+    surname: string
+    patronymic: string
+    role: string
+    id: string
 }
 interface UsersState {
     user: ResUser | null
@@ -41,8 +38,8 @@ export const signOut = createAsyncThunk(
     'user/signOut',
     async () => {
         const response = await notifyRequestCreator({
-            url: '/logout',
-            method: 'post'
+            url: '/auth/logout',
+            method: 'get'
         })
         return response.data
     }
@@ -50,7 +47,7 @@ export const signOut = createAsyncThunk(
 export const checkAuth = createAsyncThunk(
     'user/checkAuth',
     async () => {
-        const response = await axios.get(`${ENTRY_POINT}${ENTRY_POINT_V}/check_auth`, {withCredentials: true})
+        const response = await axios.get(`${ENTRY_POINT}${ENTRY_POINT_V}auth/check_auth`, {withCredentials: true})
         return response.data
     }
 )
@@ -68,7 +65,7 @@ const userSlice = createSlice({
             state.error = null;
             state.user = action.payload
             state.isAuth = true
-            localStorage.setItem('token', action.payload.accessToken)
+            localStorage.setItem('token', action.payload.access_token)
         },
         [signIn.rejected.type]: (state, action: PayloadAction<any>) => {
             state.loading = false;
@@ -96,7 +93,7 @@ const userSlice = createSlice({
             state.error = null;
             state.user = action.payload
             state.isAuth = true
-            localStorage.setItem('token', action.payload.accessToken)
+            localStorage.setItem('token', action.payload.access_token)
         },
         [checkAuth.rejected.type]: (state, action: PayloadAction<any>) => {
             state.loading = false;

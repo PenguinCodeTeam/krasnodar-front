@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import StaticPage from "../components/StaticPage";
 import {Alert, Button, Form, Input} from "antd";
 import Title from "antd/es/typography/Title";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
@@ -9,16 +8,17 @@ import {useHistory} from "react-router-dom";
 const LoginPage: React.FunctionComponent = () => {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch()
-    const {isAuth, error} = useAppSelector(state => state.userReducer)
+    const {isAuth, error, user} = useAppSelector(state => state.userReducer)
     const history = useHistory();
     const [message, setMessage] = useState(false)
 
     const onFinish = (values: any) => {
-        dispatch(signIn({url: 'login', data: values}))
+        dispatch(signIn({url: 'auth/login', data: values}))
         form.resetFields()
     };
     useEffect(() => {
-        if (isAuth) history.push('home')
+        if (isAuth && user && user.role == 'manager') history.push('load_info')
+        if (isAuth && user && user.role == 'employee') history.push('home')
     },[isAuth])
 
     useEffect(() => {
@@ -26,7 +26,7 @@ const LoginPage: React.FunctionComponent = () => {
     },[error])
 
     return (
-        <StaticPage>
+        <div className={"LoginPage"}>
             <Title>Вход</Title>
             {
                 message &&
@@ -34,6 +34,7 @@ const LoginPage: React.FunctionComponent = () => {
                     message={"Что-то пошло не так"}
                     type="error"
                     showIcon
+                    className={"LoginModal"}
                 />
             }
             <Form
@@ -73,7 +74,7 @@ const LoginPage: React.FunctionComponent = () => {
                     </Button>
                 </Form.Item>
             </Form>
-        </StaticPage>
+        </div>
     )
 }
 
