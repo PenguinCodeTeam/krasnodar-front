@@ -1,11 +1,14 @@
-import React, {memo} from "react";
+import React, {memo, useMemo} from "react";
 import MapComponent from "./MapComponent";
 import ListTasksComponent from "./ListTasksComponent";
-import {useAppSelector} from "../hooks/redux";
+import useResize from "../hooks/useResize";
 
 const ViewTasks: React.FunctionComponent = () => {
-    const {isMobile} = useAppSelector(state => state.userReducer)
-
+    const size: any[] = useResize();
+    const isMobile: any = useMemo(()=> {
+        if (size[0] >= 900) return false
+        else if (size[0] < 900) return true
+    }, [size])
     return (
         <>
             {

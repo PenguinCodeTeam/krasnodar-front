@@ -1,4 +1,4 @@
-import {createAction, createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {notifyRequestCreator} from "../../api/notify";
 import axios from "axios";
 import {ENTRY_POINT, ENTRY_POINT_V} from "../../constants";
@@ -15,15 +15,13 @@ interface UsersState {
     user: ResUser | null
     loading: boolean
     error: any,
-    isAuth: boolean,
-    isMobile: boolean
+    isAuth: boolean
 }
 const initialState: UsersState = {
     user: null,
     loading: false,
     error: null,
-    isAuth: false,
-    isMobile: false
+    isAuth: false
 }
 
 export const signIn = createAsyncThunk(
@@ -54,16 +52,10 @@ export const checkAuth = createAsyncThunk(
     }
 )
 
-export const changeSize = createAction('user/changeSize1')
-
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-        changeSize1: (state, action) => {
-            state.isMobile = action.payload
-        }
-    },
+    reducers: {},
     extraReducers: {
         [signIn.pending.type]: (state) => {
             state.loading = true;
