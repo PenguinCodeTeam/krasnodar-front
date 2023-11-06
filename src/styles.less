@@ -1,7 +1,7 @@
 body {
     display: block;
     margin: 0;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .App {
@@ -76,14 +76,30 @@ body {
         flex: 1 1 auto;
         position: relative;/* need this to position inner content */
         overflow-y: auto;
-        margin-top: 60px;
-
         display: flex;
         align-items: center;
         justify-content: center;
 
         .LoginModal {
             width: 500px;
+        }
+
+        .ViewTasks {
+            display: flex;
+            align-items: flex-start;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            .ListTasks {
+                width: 400px;
+                height: 80vh;
+                text-align: center;
+                overflow-y: scroll;
+            }
+            .MapTasks {
+                height: 80vh;
+                width: calc(100% - 400px);
+            }
         }
     }
 }

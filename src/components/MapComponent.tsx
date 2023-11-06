@@ -8,7 +8,7 @@ const MapComponent: React.FunctionComponent = () => {
     };
     return (
         <YMaps>
-            <Map defaultState={defaultState}>
+            <Map defaultState={defaultState} style={{width: '100%', height: '100%'}}>
                 <Placemark geometry={[55.684758, 37.738521]} />
             </Map>
         </YMaps>
