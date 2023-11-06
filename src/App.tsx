@@ -4,8 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {authEmployeeRoutes, authManagerRoutes, publicRoutes} from "./utils/routes";
 import {useAppDispatch, useAppSelector} from "./hooks/redux";
-import {changeSize, checkAuth, signIn} from "./store/redusers/userSlice";
-import HomePage from "./pages/HomePage";
+import {changeSize, checkAuth} from "./store/redusers/userSlice";
 import useResize from "./hooks/useResize";
 
 const App: React.FunctionComponent = function () {
