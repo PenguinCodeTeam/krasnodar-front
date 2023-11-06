@@ -7,7 +7,7 @@ const MapComponent: React.FunctionComponent = () => {
         zoom: 5,
     };
     return (
-        <YMaps>
+        <YMaps query={{apikey: '4fb659a8-e693-42d7-a970-d0645bc69cdf'}}>
             <Map defaultState={defaultState} style={{width: '100%', height: '100%'}}>
                 <Placemark geometry={[55.684758, 37.738521]} />
             </Map>
