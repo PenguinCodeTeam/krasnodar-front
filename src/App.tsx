@@ -9,10 +9,10 @@ import {checkAuth} from "./store/redusers/userSlice";
 const App: React.FunctionComponent = function () {
     const {isAuth, user} = useAppSelector(state => state.userReducer)
     const dispatch = useAppDispatch()
-
     useEffect(() => {
         dispatch(checkAuth())
     }, [])
+
     return (
         <>
             <BrowserRouter>

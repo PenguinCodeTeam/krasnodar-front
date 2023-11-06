@@ -1,7 +1,7 @@
 import React from "react";
 import StaticPage from "../components/StaticPage";
 
-const HomePage: React.FunctionComponent = () => {
+const AccountPage: React.FunctionComponent = () => {
 
     return (
         <StaticPage>
@@ -10,4 +10,4 @@ const HomePage: React.FunctionComponent = () => {
     )
 }
 
-export default HomePage
+export default AccountPage
