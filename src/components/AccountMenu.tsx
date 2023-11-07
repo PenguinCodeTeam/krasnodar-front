@@ -30,7 +30,7 @@ const AccountMenu: React.FunctionComponent = () => {
                 user &&
                 <Dropdown menu={{ items }} placement="bottomRight">
                     <Avatar style={{ backgroundColor: '#103a8c', verticalAlign: 'middle' }} size={40}>
-                        {/*{user.name[0]}*/}
+                        {user.name[0]}
                     </Avatar>
                 </Dropdown>
             }
