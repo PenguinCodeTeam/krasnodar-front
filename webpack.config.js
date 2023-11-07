@@ -33,7 +33,14 @@ module.exports = {
     },
     devServer: {
         host: '0.0.0.0',
-        port: 3000
+        port: 3000,
+        proxy: {
+            '/api/v1': {
+                target: 'http://127.0.01:3000',
+                router: () => 'http://127.0.0.1:8000',
+                logLevel: 'debug'
+            }
+        }
     },
 
     plugins: [
