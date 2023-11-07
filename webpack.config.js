@@ -40,6 +40,9 @@ module.exports = {
                 router: () => 'http://127.0.0.1:8000',
                 logLevel: 'debug'
             }
+        },
+        client: {
+            overlay: false
         }
     },
 

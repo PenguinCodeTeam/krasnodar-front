@@ -72,7 +72,8 @@ body {
     }
 
     .BodyPanel {
-        width: 80%;
+        width: 90%;
+        height: 100%;
         flex: 1 1 auto;
         position: relative;/* need this to position inner content */
         overflow-y: auto;
@@ -100,6 +101,15 @@ body {
                 height: 80vh;
                 width: calc(100% - 400px);
             }
+        }
+
+        .TableTasks {
+            display: flex;
+            align-items: flex-start;
+            height: 80vh;
+            width: 100vw;
+            overflow-x: hidden;
+            flex-direction: column;
         }
     }
 }

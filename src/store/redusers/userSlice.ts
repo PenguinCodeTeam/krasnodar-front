@@ -1,7 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {notifyRequestCreator} from "../../api/notify";
-import axios from "axios";
-import {ENTRY_POINT, ENTRY_POINT_V} from "../../constants";
 
 interface ResUser {
     access_token: string
@@ -44,13 +42,6 @@ export const signOut = createAsyncThunk(
         return response.data
     }
 )
-export const checkAuth = createAsyncThunk(
-    'user/checkAuth',
-    async () => {
-        const response = await axios.get(`${ENTRY_POINT}${ENTRY_POINT_V}auth/check_auth`, {withCredentials: true})
-        return response.data
-    }
-)
 
 const userSlice = createSlice({
     name: 'user',
@@ -85,20 +76,6 @@ const userSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        [checkAuth.pending.type]: (state) => {
-            state.loading = true;
-        },
-        [checkAuth.fulfilled.type]: (state, action: PayloadAction<ResUser>) => {
-            state.loading = false;
-            state.error = null;
-            state.user = action.payload
-            state.isAuth = true
-            localStorage.setItem('token', action.payload.access_token)
-        },
-        [checkAuth.rejected.type]: (state, action: PayloadAction<any>) => {
-            state.loading = false;
-            state.error = action.payload;
-        }
     }
 })
 
