@@ -1,31 +1,21 @@
 import React from "react";
 import {Avatar, List} from "antd";
 import {CheckOutlined} from "@ant-design/icons";
+import {createGetRequestService} from "../services/createRequestService";
 
-const ListTasksComponent: React.FunctionComponent = () => {
-    const data = [
-        {
-            title: 'Ant Design Title 1',
-        },
-        {
-            title: 'Ant Design Title 3',
-        },
-        {
-            title: 'Ant Design Title 4',
-        },
-    ];
+const ListTasksComponent: React.FunctionComponent<any> = ({data}) => {
     return (
         <List
             itemLayout="horizontal"
             dataSource={data}
-            renderItem={(item) => (
+            renderItem={(item: any) => (
                 <List.Item>
                     <List.Item.Meta
                         avatar={<Avatar style={{ backgroundColor: '#6deab7', verticalAlign: 'middle' }} >
                             <CheckOutlined />
                         </Avatar>}
-                        title={<a href="https://ant.design">{item.title}</a>}
-                        description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                        title={<a href="https://ant.design">{item.name}</a>}
+                        description={item.point.address + " " +item.time + " " + (item.status ==='open'?"ОТКРЫТО":"ЗАВЕРШЕНО")}
                     />
                 </List.Item>
             )}
