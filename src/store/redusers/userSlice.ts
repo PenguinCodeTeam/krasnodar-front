@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAction, createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {notifyRequestCreator} from "../../api/notify";
 
 interface ResUser {
@@ -32,21 +32,23 @@ export const signIn = createAsyncThunk(
         return response.data
     }
 )
-export const signOut = createAsyncThunk(
-    'user/signOut',
-    async () => {
-        const response = await notifyRequestCreator({
-            url: '/auth/logout',
-            method: 'get'
-        })
-        return response.data
-    }
-)
+
+export const signOut = createAction('user/signOutReducer')
+export const updateUser = createAction('user/updateUserReducer')
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        signOutReducer: (state) => {
+            state.isAuth = false;
+            state.user = null;
+            localStorage.removeItem('token')
+        },
+        updateUserReducer: (state,action) => {
+            state.user = action.payload
+        }
+    },
     extraReducers: {
         [signIn.pending.type]: (state) => {
             state.loading = true;
@@ -61,21 +63,7 @@ const userSlice = createSlice({
         [signIn.rejected.type]: (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload || true;
-        },
-        [signOut.pending.type]: (state) => {
-            state.loading = true;
-        },
-        [signOut.fulfilled.type]: (state) => {
-            state.loading = false;
-            state.error = null;
-            state.isAuth = false;
-            state.user = null;
-            localStorage.removeItem('token')
-        },
-        [signOut.rejected.type]: (state, action: PayloadAction<any>) => {
-            state.loading = false;
-            state.error = action.payload;
-        },
+        }
     }
 })
 

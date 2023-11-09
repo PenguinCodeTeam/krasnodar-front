@@ -26,95 +26,95 @@ interface DataType {
 const TasksPage: React.FunctionComponent = () => {
 
     const [date, setDate] = useState<string>(new Date().toLocaleDateString().replace(/\./g, "-"))
-   // const {data} = createGetRequestService({url: 'tasks', method: 'get', params: {date: date}}, [date])
+   const {data} = createGetRequestService({url: 'tasks', method: 'get', params: {date: date}}, [date])
 
-    const data: any[] = [
-        {
-            key: 'id1',
-            id: 'id1',
-            status: 'open',
-            name: 'Задача1',
-            priority: 'medium',
-            time: 34,
-            point: {
-                lat: '123',
-                lng: '123',
-            },
-            date: '12.03.12',
-            employee: {
-                id: 'idEmployee1',
-                name: 'Иванов Иван'
-            },
-        },
-        {
-            key: 'id2',
-            id: 'id2',
-            status: 'open',
-            name: 'Задача2',
-            priority: 'high',
-            time: 32,
-            point: {
-                lat: '123',
-                lng: '123',
-            },
-            date: '12.05.12',
-            employee: {
-                id: 'idEmployee1',
-                name: 'Иванов Иван'
-            },
-        },
-        {
-            key: 'id3',
-            id: 'id3',
-            status: 'open',
-            name: 'Задача3',
-            priority: 'low',
-            time: 32,
-            point: {
-                lat: '123',
-                lng: '123',
-            },
-            date: '12.03.12',
-            employee: {
-                id: 'idEmployee1',
-                name: 'Иванов Иван'
-            },
-        },
-        {
-            key: 'id4',
-            id: 'id4',
-            status: 'open',
-            name: 'Задача4',
-            priority: 'medium',
-            time: 32,
-            point: {
-                lat: '123',
-                lng: '123',
-            },
-            date: '12.04.12',
-            employee: {
-                id: 'idEmployee2',
-                name: 'Алексеев Алексей'
-            },
-        },
-        {
-            key: 'id5',
-            id: 'id5',
-            status: 'close',
-            name: 'Задача5',
-            priority: 'high',
-            time: 32,
-            point: {
-                lat: '123',
-                lng: '123',
-            },
-            date: '12.05.12',
-            employee: {
-                id: 'idEmployee2',
-                name: 'Алексеев Алексей'
-            },
-        },
-    ]
+    // const data: any[] = [
+    //     {
+    //         key: 'id1',
+    //         id: 'id1',
+    //         status: 'open',
+    //         name: 'Задача1',
+    //         priority: 'medium',
+    //         time: 34,
+    //         point: {
+    //             lat: '123',
+    //             lng: '123',
+    //         },
+    //         date: '12.03.12',
+    //         employee: {
+    //             id: 'idEmployee1',
+    //             name: 'Иванов Иван'
+    //         },
+    //     },
+    //     {
+    //         key: 'id2',
+    //         id: 'id2',
+    //         status: 'open',
+    //         name: 'Задача2',
+    //         priority: 'high',
+    //         time: 32,
+    //         point: {
+    //             lat: '123',
+    //             lng: '123',
+    //         },
+    //         date: '12.05.12',
+    //         employee: {
+    //             id: 'idEmployee1',
+    //             name: 'Иванов Иван'
+    //         },
+    //     },
+    //     {
+    //         key: 'id3',
+    //         id: 'id3',
+    //         status: 'open',
+    //         name: 'Задача3',
+    //         priority: 'low',
+    //         time: 32,
+    //         point: {
+    //             lat: '123',
+    //             lng: '123',
+    //         },
+    //         date: '12.03.12',
+    //         employee: {
+    //             id: 'idEmployee1',
+    //             name: 'Иванов Иван'
+    //         },
+    //     },
+    //     {
+    //         key: 'id4',
+    //         id: 'id4',
+    //         status: 'open',
+    //         name: 'Задача4',
+    //         priority: 'medium',
+    //         time: 32,
+    //         point: {
+    //             lat: '123',
+    //             lng: '123',
+    //         },
+    //         date: '12.04.12',
+    //         employee: {
+    //             id: 'idEmployee2',
+    //             name: 'Алексеев Алексей'
+    //         },
+    //     },
+    //     {
+    //         key: 'id5',
+    //         id: 'id5',
+    //         status: 'close',
+    //         name: 'Задача5',
+    //         priority: 'high',
+    //         time: 32,
+    //         point: {
+    //             lat: '123',
+    //             lng: '123',
+    //         },
+    //         date: '12.05.12',
+    //         employee: {
+    //             id: 'idEmployee2',
+    //             name: 'Алексеев Алексей'
+    //         },
+    //     },
+    // ]
     const dateFormat = 'DD-MM-YYYY';
 
     const filterEmployee = useMemo(() => {
@@ -207,7 +207,6 @@ const TasksPage: React.FunctionComponent = () => {
             fixed: 'right',
             width: 100,
             render: (status) => {
-                console.log(status)
                 const statusOpen = status == 'open'
                 const color = statusOpen ? 'blue' : 'green'
                 const text = statusOpen ? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'

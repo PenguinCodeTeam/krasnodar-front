@@ -8,7 +8,7 @@ const AppMenu: React.FunctionComponent = () => {
         <div className="Menu">
             <Link to="/load_info"><Text>Загрузка информации</Text></Link>
             <Link to="/tasks"><Text>Задачи</Text></Link>
-            <Link to="/employee"><Text>Работники</Text></Link>
+            <Link to="/employee"><Text>Пользователи</Text></Link>
         </div>
     )
 }
