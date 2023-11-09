@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {authEmployeeRoutes, authManagerRoutes, publicRoutes} from "./utils/routes";
-import {useAppSelector} from "./hooks/redux";
+import {useAppDispatch, useAppSelector} from "./hooks/redux";
+import {checkAuth} from "./store/redusers/userSlice";
 
 const App: React.FunctionComponent = function () {
     const {isAuth, user} = useAppSelector(state => state.userReducer)
+    const dispatch = useAppDispatch()
 
+    useEffect(() => {
+        dispatch(checkAuth())
+    }, [])
     return (
         <>
             <BrowserRouter>

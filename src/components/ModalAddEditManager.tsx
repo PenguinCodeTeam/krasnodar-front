@@ -27,8 +27,9 @@ const ModalAddEditManager: React.FunctionComponent<Props> = memo((props) => {
     const queryClient = useQueryClient()
     const history = useHistory();
     const url = history.location.pathname.replace('/account/', '')
+    const queryKey = url=='/employee' ? 'manager' : url
     const mutationProduct = useMutation((data: object)=>fetchAddEditManager(data),{
-        onSuccess: () => queryClient.invalidateQueries(data.queryKey),
+        onSuccess: () => queryClient.invalidateQueries(queryKey),
     })
 
     const handleOk = async (value: any) => {
@@ -42,8 +43,7 @@ const ModalAddEditManager: React.FunctionComponent<Props> = memo((props) => {
         const dataReq = {
             data: reqData,
             method: type == 'add' ? 'post' : 'patch',
-            url: type == 'add' ? '/manager' : `/manager/${data?.id}`,
-            queryKey: type=='edit' ? 'manager' : url
+            url: type == 'add' ? '/manager' : `/manager/${data?.id}`
         }
         mutationProduct.mutate(dataReq)
         form.resetFields()
@@ -73,7 +73,7 @@ const ModalAddEditManager: React.FunctionComponent<Props> = memo((props) => {
                     name="login"
                     rules={[{ required: true, message: 'Пожалуйста введите логин!' }]}
                 >
-                    <Input />
+                    <Input autoComplete='new-login'/>
                 </Form.Item>
                 <Form.Item
                     label="Имя"
@@ -109,7 +109,7 @@ const ModalAddEditManager: React.FunctionComponent<Props> = memo((props) => {
                         ]}
                         hasFeedback
                     >
-                        <Input.Password />
+                        <Input.Password autoComplete='new-password' />
                     </Form.Item>
                 }
                 {
