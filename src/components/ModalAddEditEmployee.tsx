@@ -1,5 +1,5 @@
 import React, {memo} from "react";
-import {Form, Input, Modal} from "antd";
+import {Form, Input, Modal, Select} from "antd";
 import {useMutation, useQueryClient} from "react-query";
 import {notifyRequestCreator} from "../api/notify";
 import {useHistory} from "react-router-dom";
@@ -97,11 +97,15 @@ const ModalAddEditEmployee: React.FunctionComponent<Props> = memo((props) => {
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Уровень"
                     name="grade"
+                    label="Уровень"
                     rules={[{ required: true, message: 'Пожалуйста введите уровень!' }]}
                 >
-                    <Input />
+                    <Select>
+                        <Select.Option value="junior">Младший</Select.Option>
+                        <Select.Option value="middle">Средний</Select.Option>
+                        <Select.Option value="senior">Старший</Select.Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item
                     label="Адрес"
