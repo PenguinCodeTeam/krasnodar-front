@@ -6,7 +6,7 @@ async function fetchProduct(args: any){
     return data
 }
 export const createGetRequestService = (data: any, dependencies:any  = []) => {
-    return useQuery([data?.url, ...dependencies], () => fetchProduct(data),{
+    return useQuery([data?.queryKey || data?.url], () => fetchProduct(data),{
         keepPreviousData: true, // предыдущие данные будут оставаться до загрузки новых
     });
 };

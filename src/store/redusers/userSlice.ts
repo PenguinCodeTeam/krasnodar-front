@@ -1,5 +1,7 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAction, createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {notifyRequestCreator} from "../../api/notify";
+import axios from "axios";
+import {ENTRY_POINT, ENTRY_POINT_V} from "../../constants";
 
 interface ResUser {
     access_token: string
@@ -32,21 +34,30 @@ export const signIn = createAsyncThunk(
         return response.data
     }
 )
-export const signOut = createAsyncThunk(
-    'user/signOut',
+export const checkAuth = createAsyncThunk(
+    'user/checkAuth',
     async () => {
-        const response = await notifyRequestCreator({
-            url: '/auth/logout',
-            method: 'get'
-        })
+        const response = await axios.get(`${ENTRY_POINT}${ENTRY_POINT_V}auth/check_auth`, {withCredentials: true})
         return response.data
     }
 )
 
+export const signOut = createAction('user/signOutReducer')
+export const updateUser = createAction('user/updateUserReducer')
+
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        signOutReducer: (state) => {
+            state.isAuth = false;
+            state.user = null;
+            localStorage.removeItem('token')
+        },
+        updateUserReducer: (state,action) => {
+            state.user = action.payload
+        }
+    },
     extraReducers: {
         [signIn.pending.type]: (state) => {
             state.loading = true;
@@ -62,20 +73,20 @@ const userSlice = createSlice({
             state.loading = false;
             state.error = action.payload || true;
         },
-        [signOut.pending.type]: (state) => {
+        [checkAuth.pending.type]: (state) => {
             state.loading = true;
         },
-        [signOut.fulfilled.type]: (state) => {
+        [checkAuth.fulfilled.type]: (state, action: PayloadAction<ResUser>) => {
             state.loading = false;
             state.error = null;
-            state.isAuth = false;
-            state.user = null;
-            localStorage.removeItem('token')
+            state.user = action.payload
+            state.isAuth = true
+            localStorage.setItem('token', action.payload.access_token)
         },
-        [signOut.rejected.type]: (state, action: PayloadAction<any>) => {
+        [checkAuth.rejected.type]: (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload;
-        },
+        }
     }
 })
 
