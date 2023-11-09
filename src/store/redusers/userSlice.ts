@@ -34,6 +34,7 @@ export const signIn = createAsyncThunk(
 )
 
 export const signOut = createAction('user/signOutReducer')
+export const updateUser = createAction('user/updateUserReducer')
 
 const userSlice = createSlice({
     name: 'user',
@@ -43,6 +44,9 @@ const userSlice = createSlice({
             state.isAuth = false;
             state.user = null;
             localStorage.removeItem('token')
+        },
+        updateUserReducer: (state,action) => {
+            state.user = action.payload
         }
     },
     extraReducers: {

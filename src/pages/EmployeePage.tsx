@@ -1,9 +1,10 @@
 import React from "react";
 import StaticPage from "../components/StaticPage";
-import {Avatar, List, Tabs, Tag, Tooltip} from "antd";
+import {Avatar, Button, List, Tabs, Tag, Tooltip} from "antd";
 import {DownOutlined, EditTwoTone, EyeTwoTone, MenuOutlined, UpOutlined} from "@ant-design/icons";
 import {createGetRequestService} from "../services/createRequestService";
 import {Link} from "react-router-dom";
+import {PlusOutlined} from '@ant-design/icons';
 
 interface DataI {
     id: string,
@@ -16,6 +17,7 @@ interface DataI {
     grade: string,
 }
 const EmployeePage: React.FunctionComponent = () => {
+    // TODO: нужна кнопка добавления сотрудника
 
     const {data: employeeData} = createGetRequestService({url: 'employee', method: 'get'})
     const {data: managerData} = createGetRequestService({url: 'manager', method: 'get'})
@@ -319,7 +321,7 @@ const EmployeePage: React.FunctionComponent = () => {
     const actionMass = (item: DataI) => {
         const actions = [
             <Tooltip title="Изменить информацию о пользователе">
-                <Link to={`/account/${item.id}`}><EditTwoTone twoToneColor="#103a8c"/></Link>
+                <Link to={`/account/${item.role}/${item.id}`}><EditTwoTone twoToneColor="#103a8c"/></Link>
             </Tooltip>
         ]
         if (item.role === 'employee') {
@@ -390,6 +392,10 @@ const EmployeePage: React.FunctionComponent = () => {
         <StaticPage>
             <div className={'ViewTasks'}>
                 <div className={'EmployeeList'}>
+                    <div style={{width: '100%', textAlign: 'right'}}>
+                        <Button icon={<PlusOutlined />}>добавить пользователя</Button>
+                    </div>
+
                     <Tabs
                         defaultActiveKey="employee"
                         items={[
