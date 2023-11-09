@@ -4,14 +4,12 @@ import {Map, YMaps} from "@pbe/react-yandex-maps";
 const RoutMapComponent: React.FunctionComponent<any> = ({data}) => {
     const map: any = useRef(null);
     const mapState = {
-        center: [55.739625, 37.5412],
+        center: [45.035765, 38.975605],
         zoom: 12,
     };
     const addresses = data.map((el:any)=>el.point.address)
 
     const addRoute = (ymaps: any) => {
-
-
         const multiRoute = new ymaps.multiRouter.MultiRoute(
             {
                 referencePoints: addresses,

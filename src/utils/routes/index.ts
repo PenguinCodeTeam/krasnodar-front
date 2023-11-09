@@ -1,10 +1,20 @@
 import HomePage from "../../pages/HomePage";
-import {ACCOUNT_PATH, EMPLOYEE_ID_PATH, EMPLOYEE_PATH, HOME_PATH, LOAD_INFO_PATH, LOGIN_PATH, TASKS_PATH} from "./path";
+import {
+    ACCOUNT_PATH,
+    EMPLOYEE_ID_PATH,
+    EMPLOYEE_PATH,
+    HOME_PATH,
+    LOAD_INFO_PATH,
+    LOGIN_PATH,
+    TASK_ID_PATH,
+    TASKS_PATH
+} from "./path";
 import LoginPage from "../../pages/LoginPage";
 import LoadInfoPage from "../../pages/LoadInfoPage";
 import TasksPage from "../../pages/TasksPage";
 import EmployeePage from "../../pages/EmployeePage";
 import AccountPage from "../../pages/AccountPage";
+import TaskPage from "../../pages/TaskPage";
 
 export const publicRoutes = [
     {
@@ -42,5 +52,9 @@ export const authManagerRoutes = [
     {
         path: EMPLOYEE_ID_PATH,
         Component: HomePage,
+    },
+    {
+        path: TASK_ID_PATH,
+        Component: TaskPage,
     },
 ]

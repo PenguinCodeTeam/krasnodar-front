@@ -2,6 +2,7 @@ import React, {memo, useMemo} from "react";
 import RoutMapComponent from "./RoutMapComponent";
 import ListTasksComponent from "./ListTasksComponent";
 import useResize from "../hooks/useResize";
+import {Tabs, TabsProps} from "antd";
 
 const ViewTasks: React.FunctionComponent = () => {
     const size: any[] = useResize();
@@ -9,7 +10,8 @@ const ViewTasks: React.FunctionComponent = () => {
         if (size[0] >= 900) return false
         else if (size[0] < 900) return true
     }, [size])
-    // const {data} = createGetRequestService({url: 'tasks', method: 'get', params: {date: date}}, [date])
+    // const {data} = createGetRequestService({url: 'tasks', method: 'get', params: {date: date}}, [date]
+
     const data: any[] = [
         {
             key: 'id1',
@@ -102,6 +104,18 @@ const ViewTasks: React.FunctionComponent = () => {
             },
         },
     ]
+    const items: TabsProps['items'] = [
+        {
+            key: '1',
+            label: 'Задачи',
+            children: <ListTasksComponent data={data}></ListTasksComponent>,
+        },
+        {
+            key: '2',
+            label: 'Карты',
+            children: <RoutMapComponent data={data}></RoutMapComponent>
+        },
+    ];
     return (
         <>
             {
@@ -117,8 +131,9 @@ const ViewTasks: React.FunctionComponent = () => {
             }
             {
                 isMobile &&
-                <div className={'ViewTasks'}>
-                    mobileVersion
+                <div className={'TableTasks'}>
+                   <Tabs items={items}>
+                   </Tabs>
                 </div>
             }
         </>

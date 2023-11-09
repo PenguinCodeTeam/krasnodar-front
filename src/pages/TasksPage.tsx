@@ -139,6 +139,9 @@ const TasksPage: React.FunctionComponent = () => {
             key: 'name',
             fixed: 'left',
             width: 250,
+            render: (name, task) => {
+                return <Link to={`/task/${task.id}`}>{task?.name}</Link>
+            },
         },
         {
             title: 'Приоритет',
@@ -231,7 +234,6 @@ const TasksPage: React.FunctionComponent = () => {
                 </div>
                 <Table
                     columns={columns}
-
                     dataSource={data}
                     scroll={{ x: '100vw' }}
                 >
