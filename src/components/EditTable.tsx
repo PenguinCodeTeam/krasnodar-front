@@ -71,10 +71,25 @@ const EditTable: React.FC<any> = ({originData, columns}) => {
 
     const isEditing = (record: DataType) => record.key === editingKey;
 
+    const deleteRow = (record: Partial<DataType> & { key: React.Key }) => {
+        let newData: any = [...data];
+        let index = newData.findIndex((el: DataType)=>el.key === record.key);
+        newData.splice(index, 1)
+        setData(newData);
+    }
+
     const edit = (record: Partial<DataType> & { key: React.Key }) => {
-        form.setFieldsValue({ name: '', age: '', address: '', ...record });
+        form.setFieldsValue({
+            "address": "",
+            "connected_at": "",
+            "is_delivered": "нет",
+            "days_after_delivery": 0,
+            "accepted_requests": 0,
+            "completed_requests": 0, ...record });
         setEditingKey(record.key);
     };
+
+
 
     const cancel = () => {
         setEditingKey('');
@@ -116,14 +131,19 @@ const EditTable: React.FC<any> = ({originData, columns}) => {
             <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
               Сохранить
             </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+            <Popconfirm title="Отменить?" onConfirm={cancel}>
               <a>Отмена</a>
             </Popconfirm>
           </span>
                 ) : (
-                    <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                        Изменить
-                    </Typography.Link>
+                    <span>
+                        <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)} style={{ marginRight: 8 }}>
+                            Изменить
+                        </Typography.Link>
+                        <Popconfirm title="Удалить?" onConfirm={()=>deleteRow(record)}>
+                            <a>Удалить</a>
+                        </Popconfirm>
+                    </span>
                 );
             },
         },

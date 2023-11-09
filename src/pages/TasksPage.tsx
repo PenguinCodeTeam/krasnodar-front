@@ -139,6 +139,9 @@ const TasksPage: React.FunctionComponent = () => {
             key: 'name',
             fixed: 'left',
             width: 250,
+            render: (name, task) => {
+                return <Link to={`/task/${task.id}`}>{task?.name}</Link>
+            },
         },
         {
             title: 'Приоритет',
@@ -207,7 +210,6 @@ const TasksPage: React.FunctionComponent = () => {
             fixed: 'right',
             width: 100,
             render: (status) => {
-                console.log(status)
                 const statusOpen = status == 'open'
                 const color = statusOpen ? 'blue' : 'green'
                 const text = statusOpen ? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'
@@ -232,7 +234,6 @@ const TasksPage: React.FunctionComponent = () => {
                 </div>
                 <Table
                     columns={columns}
-
                     dataSource={data}
                     scroll={{ x: '100vw' }}
                 >

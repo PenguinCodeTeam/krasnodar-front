@@ -3,7 +3,7 @@ import {Placemark, Map, YMaps} from "@pbe/react-yandex-maps";
 
 const MapComponent: React.FunctionComponent<any> = ({point}) => {
     const defaultState = {
-        center: [55.751574, 37.573856],
+        center: [45.035765, 38.975605],
         zoom: 5,
     };
     return (

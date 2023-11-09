@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-import { UploadOutlined, DeliveredProcedureOutlined } from '@ant-design/icons';
+import { UploadOutlined, DeliveredProcedureOutlined, NodeIndexOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import EditTable from "./EditTable";
-import {createAsyncThunk} from "@reduxjs/toolkit";
 import {notifyRequestCreator} from "../api/notify";
 const XLSX = require('xlsx');
 
@@ -10,7 +9,7 @@ interface DataType {
     "key": string,
     "address": string,
     "connected_at": string,
-    "is_delivered": boolean,
+    "is_delivered": boolean | string,
     "days_after_delivery": number,
     "accepted_requests": number,
     "completed_requests": number
@@ -27,6 +26,7 @@ class dataType implements DataType {
 
 const ParseExcel: React.FunctionComponent = () => {
     const [excel, setExcel] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [fileName, setName] = useState<string>("");
     const [columns, setColumns] = useState<any>([]);
     const encodeFile=(_file: File): Promise<String> => {
@@ -42,6 +42,22 @@ const ParseExcel: React.FunctionComponent = () => {
             fileReader.readAsBinaryString(_file);
         });
     }
+    const startTasks = ()=>{}
+    const addRow = () => {
+        let newData: any = [...excel];
+        let row: DataType = {
+            "key": (newData.length+1).toString(),
+            "address": "",
+            "connected_at": "",
+            "is_delivered": "нет",
+            "days_after_delivery": 0,
+            "accepted_requests": 0,
+            "completed_requests": 0
+        }
+        newData.push(row)
+        setExcel(newData);
+    }
+
     const onDownloadDoc = ($event: any, accept?:'') => {
         let _shadow_input = document.createElement('input');
         _shadow_input.type = 'file';
@@ -81,21 +97,23 @@ const ParseExcel: React.FunctionComponent = () => {
         _shadow_input.click();
     }
 
-    const saveExcel = () => {
-        (async () => {
-            const response = await notifyRequestCreator(Object.assign({}, [...excel].map(el=>el.is_delivered = el.is_delivered==='да'), {
+    const saveExcel = async () => {
+            const response = await notifyRequestCreator(Object.assign({},
+                { data: { input_data: [...excel].map(el=>{
+                    el.is_delivered = el.is_delivered === 'да' ;
+                    delete el.key;
+                            return el;
+                })}}, {
                 url: 'manager/input_data',
                 method: 'post'
             }))
             return response.data
-        })()
-
-    }
+        }
 
     return (
             <div className={'TableTasks'}>
                 <div style={{width: '100%', margin: '0 0 20px 0', textAlign: 'right'}}>
-                    <Button icon={<UploadOutlined />} onClick={($event)=>onDownloadDoc($event)}>Загрузить файл</Button><Button icon={<DeliveredProcedureOutlined />} disabled={excel.length===0} onClick={()=>saveExcel()}>Сохранить файл</Button>
+                    <Button icon={<NodeIndexOutlined />} onClick={()=>startTasks()}>Запустить распределение</Button><Button icon={<UploadOutlined />} onClick={($event)=>onDownloadDoc($event)}>Загрузить файл</Button><Button icon={<DeliveredProcedureOutlined />} disabled={excel.length===0} onClick={()=>saveExcel()}>Сохранить файл</Button><Button icon={<PlusOutlined />} onClick={()=>addRow()} disabled={excel.length===0}>Добавить строку</Button>
                 </div>
             {excel.length ?
                 <EditTable originData={excel} columns={columns}></EditTable>:<></>
