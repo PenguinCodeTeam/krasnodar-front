@@ -8,6 +8,7 @@ import {EditOutlined} from "@ant-design/icons";
 import {createGetRequestService} from "../services/createRequestService";
 import {useHistory} from "react-router-dom";
 import ModalAddEditManager from "../components/ModalAddEditManager";
+import ModalAddEditEmployee from "../components/ModalAddEditEmployee";
 
 const AccountPage: React.FunctionComponent = () => {
 
@@ -71,7 +72,7 @@ const AccountPage: React.FunctionComponent = () => {
             }
             {
                 data?.role == 'employee' &&
-                <ModalAddEditManager open={open} onClose={()=>setOpen(false)} key={JSON.stringify(data)} type='edit' data={data} />
+                <ModalAddEditEmployee open={open} onClose={()=>setOpen(false)} key={JSON.stringify(data)} type='edit' data={data} />
             }
         </StaticPage>
     )

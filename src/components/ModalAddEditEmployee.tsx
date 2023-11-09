@@ -16,33 +16,34 @@ interface Props {
     open: boolean
     onClose: (values: any) => void;
     type: string
-    data: {
-        id: string,
-        login: string,
-        name: string,
-        surname: string,
-        patronymic: string,
-        role: string,
-        grade: string,
-        address: string
-    }
+    keyStr?: string
+    data?: any
 }
 
 const ModalAddEditEmployee: React.FunctionComponent<Props> = memo((props) => {
-    const {open, onClose, type, data} = props
+    const {open, onClose, type, data=null, keyStr} = props
     const [form] = Form.useForm();
     const queryClient = useQueryClient()
     const history = useHistory();
     const url = history.location.pathname.replace('/account/', '')
     const mutationProduct = useMutation((data: object)=>fetchAddEditEmployee(data),{
-        onSuccess: () => queryClient.invalidateQueries(url)
+        onSuccess: () => queryClient.invalidateQueries(data.queryKey)
     })
 
+
     const handleOk = async (value: any) => {
+        const reqData = value
+        if (type=='add') {
+            if (reqData.password === reqData.secondpassword) {
+                delete reqData.secondpassword
+            }
+        }
+
         const dataReq = {
-            data: value,
+            data: reqData,
             method: type == 'add' ? 'post' : 'patch',
-            url: `/employee/${data?.id}`
+            url: type == 'add' ? '/employee' : `/employee/${data?.id}`,
+            queryKey: type=='edit' ? 'employee' : url
         }
         mutationProduct.mutate(dataReq)
         form.resetFields()
@@ -56,7 +57,7 @@ const ModalAddEditEmployee: React.FunctionComponent<Props> = memo((props) => {
             onOk={form.submit}
             onCancel={()=>onClose(false)}
             width={800}
-            okText="Изменить"
+            okText= {type=='add' ? 'Добавить' : 'Изменить'}
             cancelText= "Отменить"
             okType="default"
         >
@@ -65,7 +66,7 @@ const ModalAddEditEmployee: React.FunctionComponent<Props> = memo((props) => {
                 onFinish={handleOk}
                 form={form}
                 initialValues={data}
-                key={JSON.stringify(data)}
+                key={keyStr}
             >
                 <Form.Item
                     label="Логин"
@@ -109,6 +110,47 @@ const ModalAddEditEmployee: React.FunctionComponent<Props> = memo((props) => {
                 >
                     <Input />
                 </Form.Item>
+                {
+                    type=='add' &&
+                    <Form.Item
+                        name="password"
+                        label="Пароль"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Пожалуйста, введите пароль!',
+                            },
+                        ]}
+                        hasFeedback
+                    >
+                        <Input.Password />
+                    </Form.Item>
+                }
+                {
+                    type=='add' &&
+                    <Form.Item
+                        name="secondpassword"
+                        label="Подтверждение пароля"
+                        dependencies={['password']}
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Пожалуйста, подтвердите пароль!',
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('password') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('Пароли не совпадают!'));
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+                }
             </Form>
         </Modal>
     )
