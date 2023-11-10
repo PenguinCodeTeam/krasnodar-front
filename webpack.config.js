@@ -2,10 +2,7 @@ const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const tableMap = {
-    'http://127.0.01:4000':'http://127.0.0.1:3000',
-    'http://127.0.01:3000':'http://127.0.0.1:8000',
-};
+
 module.exports = {
     mode: 'development',
     entry: './src/index.tsx',
@@ -36,13 +33,10 @@ module.exports = {
     },
     devServer: {
         host: '127.0.0.1',
-        port: 4000,
+        port: 3000,
         proxy: {
-            '/api/v1': {
-                target: 'http://127.0.0.1:3000',
-                router: 'http://127.0.0.1:8000',
-                logLevel: 'debug',
-                changeOrigin: true
+            '/': {
+                target: 'http://127.0.0.1:8000',
             }
         },
         client: {
