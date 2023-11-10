@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import { UploadOutlined, DeliveredProcedureOutlined, NodeIndexOutlined, PlusOutlined } from '@ant-design/icons';
-import {Button, Form, Input} from 'antd';
+import React, {useEffect, useState} from "react";
+import { UploadOutlined, DeliveredProcedureOutlined, NodeIndexOutlined, PlusOutlined, CheckCircleOutlined, SyncOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import {Button, Form, Input, Space, Spin, Tag} from 'antd';
 import EditTable from "./EditTable";
 import {notifyRequestCreator} from "../api/notify";
 const XLSX = require('xlsx');
@@ -14,6 +14,7 @@ interface DataType {
     "accepted_requests": number,
     "completed_requests": number
 }
+
 class dataType implements DataType {
     "key" = "string";
     "full_address" = "string";
@@ -26,8 +27,9 @@ class dataType implements DataType {
 
 const ParseExcel: React.FunctionComponent = () => {
     const [excel, setExcel] = useState<any[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const [fileName, setName] = useState<string>("");
+    const [status, setStatus] = useState<string>("default");
     const [form] = Form.useForm();
     const [columns, setColumns] = useState<any>([]);
     const encodeFile=(_file: File): Promise<String> => {
@@ -43,7 +45,47 @@ const ParseExcel: React.FunctionComponent = () => {
             fileReader.readAsBinaryString(_file);
         });
     }
-    const startTasks = ()=>{}
+    useEffect(()=>{
+        if(loading) getStatus();
+    },[])
+
+    const getStatus = async ()=>{
+        try {
+            const response = await notifyRequestCreator(Object.assign({},
+                {
+                    url: 'distribution',
+                    method: 'get'
+                }))
+            if(!response.data.status as any === 'in_progress')setLoading(true)
+            setStatus(response.data.status)
+            return response.data
+        }catch (e: any) {
+            setLoading(false)
+            setStatus('error')
+            return e.response.data.error
+        }
+    }
+
+    const startTasks = async ()=>{
+       setStatus('in_progress');
+       try {
+            const response = await notifyRequestCreator(Object.assign({},
+                {
+                    data: null
+                }, {
+                    url: 'distribution',
+                    method: 'post'
+                }))
+            setLoading(true)
+            setStatus(response.data.status)
+            return response.data
+        }catch (e: any) {
+            setLoading(false)
+            setStatus('error')
+            return e.response.data.error
+        }
+    }
+
     const addRow = () => {
         let newData: any = [...excel];
         let row: DataType = {
@@ -99,20 +141,49 @@ const ParseExcel: React.FunctionComponent = () => {
     }
 
     const saveExcel = async () => {
+        setLoading(true)
+        try {
             const response = await notifyRequestCreator(Object.assign({},
-                { data: { city: form.getFieldValue('city'), destinations: [...excel].map(el=>{
-                    el.is_delivered = el.is_delivered === 'да' ;
-                    delete el.key;
+                {
+                    data: {
+                        city: form.getFieldValue('city'), destinations: [...excel].map(el => {
+                            el.is_delivered = el.is_delivered === 'да';
+                            delete el.key;
                             return el;
-                })}}, {
-                url: 'input_data',
-                method: 'post'
-            }))
+                        })
+                    }
+                }, {
+                    url: 'input_data',
+                    method: 'post'
+                }))
+            setLoading(true)
+            setStatus(response.data.status);
             return response.data
+        }catch (e: any) {
+            setLoading(false)
+            setStatus('error')
+            return e.response.data.error
         }
+    }
+
 
     return (
             <div className={'TableTasks'}>
+                <div style={{width: '100%', margin: '0 0 20px 0', display: 'flex', justifyContent: 'center'}}>
+                    {status==='default'&&<Tag color="default">
+                        Процесс не запущен
+                    </Tag>
+                    }
+                    {status==='ok'&&<Tag icon={<CheckCircleOutlined />} color="success">
+                        Распределение выполнено
+                    </Tag>}
+                    {status==='in_progress'&&<Tag icon={<SyncOutlined spin />} color="processing">
+                        Идет распределение
+                    </Tag>}
+                    {status==='error'&&<Tag icon={<CloseCircleOutlined />} color="error">
+                        Ошибка распределения
+                    </Tag>}
+                </div>
                 <div style={{width: '100%', margin: '0 0 20px 0', display: 'flex', justifyContent: 'right'}}>
                     <Form
                         onFinish={saveExcel}
@@ -125,16 +196,16 @@ const ParseExcel: React.FunctionComponent = () => {
                             name="city"
                             rules={[{ required: true, message: 'Город' }]}
                         >
-                            <Input disabled={excel.length === 0}/>
+                            <Input disabled={excel.length === 0 || loading}/>
                         </Form.Item>
                     </Form>
-                    <Button icon={<NodeIndexOutlined />} onClick={()=>startTasks()}>Запустить распределение</Button>
-                    <Button icon={<UploadOutlined />} onClick={($event)=>onDownloadDoc($event)}>Загрузить файл</Button>
-                    <Button icon={<DeliveredProcedureOutlined />} disabled={excel.length===0} onClick={form.submit}>Сохранить файл</Button>
-                    <Button icon={<PlusOutlined />} onClick={()=>addRow()} disabled={excel.length===0}>Добавить строку</Button>
+                    <Button icon={<NodeIndexOutlined />} onClick={()=>startTasks()} disabled={loading}>Запустить распределение</Button>
+                    <Button icon={<UploadOutlined />} disabled={loading} onClick={($event)=>onDownloadDoc($event)}>Загрузить файл</Button>
+                    <Button icon={<DeliveredProcedureOutlined />} disabled={excel.length===0 || loading} onClick={form.submit}>Сохранить файл</Button>
+                    <Button icon={<PlusOutlined />} onClick={()=>addRow()} disabled={excel.length===0 || loading}>Добавить строку</Button>
                 </div>
             {excel.length ?
-                <EditTable originData={excel} columns={columns}></EditTable>:<></>
+                <Spin spinning={loading}><EditTable originData={excel} columns={columns}></EditTable></Spin>:<></>
             }
             </div>
     );
