@@ -1,13 +1,14 @@
 import React, {useMemo, useState} from "react";
 import MapComponent from "../components/MapComponent";
 import {Button, Col, Divider, Form, Row, Tabs, Tag, Typography} from "antd";
-import { CheckCircleTwoTone } from '@ant-design/icons';
+import {CheckCircleTwoTone, DownOutlined, MenuOutlined, UpOutlined} from '@ant-design/icons';
 import {notifyRequestCreator} from "../api/notify";
 import TextArea from "antd/es/input/TextArea";
 import StaticPage from "../components/StaticPage";
 import { useParams } from 'react-router-dom';
 import RoutMapComponent from "../components/RoutMapComponent";
 import useResize from "../hooks/useResize";
+import {createGetRequestService} from "../services/createRequestService";
 type Param = {
     id: string
 }
@@ -19,27 +20,27 @@ const TaskPage: React.FunctionComponent<any> = () => {
     }, [size])
     const id: Param = useParams();
     const [form] = Form.useForm();
-    // const task: any = createGetRequestService({url: 'task/'+id.id, method: 'get'})
-    const task =
-        {
-            key: 'id2',
-            id: 'id2',
-            status: 'open',
-            name: 'Задача2',
-            priority: 'high',
-            time: 32,
-            point: {
-                lat: '123',
-                lng: '123',
-                address: "г. Краснодар, ул. им. Атарбекова, д. 24"
-            },
-            date: '12.05.12',
-            employee: {
-                id: 'idEmployee1',
-                name: 'Иванов Иван'
-            },
-            message: 'Добавить примечание в параметре note'
-    }
+    const {data} = createGetRequestService({url: 'task/'+id.id, method: 'get'});
+    // const task =
+    //     {
+    //         key: 'id2',
+    //         id: 'id2',
+    //         status: 'open',
+    //         name: 'Задача2',
+    //         priority: 'high',
+    //         time: 32,
+    //         point: {
+    //             lat: '123',
+    //             lng: '123',
+    //             address: "г. Краснодар, ул. им. Атарбекова, д. 24"
+    //         },
+    //         date: '12.05.12',
+    //         employee: {
+    //             id: 'idEmployee1',
+    //             name: 'Иванов Иван'
+    //         },
+    //         message: 'Добавить примечание в параметре note'
+    // }
 
     const end = async (value: any) => {
             const response = await notifyRequestCreator(Object.assign({}, {
@@ -50,19 +51,19 @@ const TaskPage: React.FunctionComponent<any> = () => {
             return response.data
     }
     return (
-        task &&
+        data &&
         <StaticPage>
             {
                 !isMobile &&
                 <div className={'ViewTasks'}>
                     <div className={'ListTasks'}>
-                        <Divider>{task.name}</Divider>
+                        <Divider>{data.name}</Divider>
                         <Row>
                             <Col className="gutter-row" span={12}>
                                 <div>Адрес:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{task.point.address}</div>
+                                <div>{data.point.address}</div>
                             </Col>
                         </Row>
                         <Row>
@@ -70,7 +71,41 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Время:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{task.time}</div>
+                                <div>{data.time}</div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="gutter-row" span={12}>
+                                <div>Приоритет:</div>
+                            </Col>
+                            <Col className="gutter-row" span={12}>
+                                {
+                                    data.priority == 'high' &&
+                                    <Tag icon={<UpOutlined twoToneColor='#cf1322' />} color="error">
+                                        Высокий
+                                    </Tag>
+                                }
+                                {
+                                    data.priority == 'medium' &&
+                                    <Tag icon={<MenuOutlined twoToneColor='#d48806' />} color="gold">
+                                        Средний
+                                    </Tag>
+                                }
+                                {
+                                    data.priority == 'low' &&
+
+                                    <Tag icon={<DownOutlined />} color="success">
+                                        Низкий
+                                    </Tag>
+                                }
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="gutter-row" span={12}>
+                                <div>Исполнитель:</div>
+                            </Col>
+                            <Col className="gutter-row" span={12}>
+                                <div>{data.employee?.name}</div>
                             </Col>
                         </Row>
                         <Row>
@@ -78,35 +113,35 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Статус:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <Tag color={task?.status === 'open'? 'blue' : 'green'}>
-                                    {task?.status === 'open'? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'}
+                                <Tag color={data?.status === 'open'? 'blue' : 'green'}>
+                                    {data?.status === 'open'? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'}
                                 </Tag>
                             </Col>
                         </Row>
                         <Row>
                             <Col className="gutter-row" span={24}>
-                                <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} onClick={form.submit} disabled={task.status !== 'open'}>Завершить</Button>
+                                <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} onClick={form.submit} disabled={data.status !== 'open'}>Завершить</Button>
                             </Col>
                             <Col className="gutter-row" span={24}>
                                 <Form
                                     layout="horizontal"
                                     onFinish={end}
                                     form={form}
-                                    initialValues={{message: task.message}}
+                                    initialValues={{message: data.message}}
                                     key={'Task'}
                                 >
                                     <Form.Item
                                         name="note"
                                         rules={[{ required: false, message: 'Комментарий' }]}
                                     >
-                                        <TextArea rows={4} disabled={task.status !== 'open'}/>
+                                        <TextArea rows={4} disabled={data.status !== 'open'}/>
                                     </Form.Item>
                                 </Form>
                             </Col>
                         </Row>
                     </div>
                     <div className={'MapTasks'}>
-                        <RoutMapComponent data={[task]}></RoutMapComponent>
+                        <RoutMapComponent data={[data]}></RoutMapComponent>
                     </div>
                 </div>
             }
@@ -119,7 +154,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Адрес:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{task.point.address}</div>
+                                <div>{data.point.address}</div>
                             </Col>
                         </Row>
                         <Row>
@@ -127,7 +162,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Время (мин.):</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{task.time}</div>
+                                <div>{data.time}</div>
                             </Col>
                         </Row>
                     <Row>
@@ -135,34 +170,34 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Статус:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <Tag color={task?.status === 'open'? 'blue' : 'green'}>
-                                    {task?.status === 'open'? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'}
+                                <Tag color={data?.status === 'open'? 'blue' : 'green'}>
+                                    {data?.status === 'open'? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'}
                                 </Tag>
                             </Col>
                     </Row>
                     <Row>
                             <Col className="gutter-row" span={24}>
-                                <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} onClick={form.submit} disabled={task.status !== 'open'}>Завершить</Button>
+                                <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} onClick={form.submit} disabled={data.status !== 'open'}>Завершить</Button>
                             </Col>
                             <Col className="gutter-row" span={24}>
                                 <Form
                                     layout="horizontal"
                                     onFinish={end}
                                     form={form}
-                                    initialValues={{note: task.message}}
+                                    initialValues={{note: data.message}}
                                     key={'Task'}
                                 >
                                     <Form.Item
                                         name="note"
                                         rules={[{ required: false, message: 'Комментарий' }]}
                                     >
-                                        <TextArea rows={4} disabled={task.status !== 'open'}/>
+                                        <TextArea rows={4} disabled={data.status !== 'open'}/>
                                     </Form.Item>
                                 </Form>
                             </Col>
                         </Row>
                     <div style={{maxWidth: size[0], maxHeight: size[1]}}>
-                        <RoutMapComponent data={[task]}></RoutMapComponent>
+                        <RoutMapComponent data={[data]}></RoutMapComponent>
                     </div>
                 </div>
             }
