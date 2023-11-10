@@ -29,7 +29,7 @@ const ParseExcel: React.FunctionComponent = () => {
     const [excel, setExcel] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [fileName, setName] = useState<string>("");
-    const [status, setStatus] = useState<string>("default");
+    const [status, setStatus] = useState<string>("in_progress");
     const [form] = Form.useForm();
     const [columns, setColumns] = useState<any>([]);
     const encodeFile=(_file: File): Promise<String> => {
@@ -45,17 +45,14 @@ const ParseExcel: React.FunctionComponent = () => {
             fileReader.readAsBinaryString(_file);
         });
     }
-    useEffect(()=>{
-        if(loading) getStatus();
-    },[])
     useEffect(() => {
-        if(status==='in_progress') {
+        if(status==='in_progress' || loading) {
             const interval = setInterval(() => getStatus(), 3000)
             return () => {
                 clearInterval(interval);
             }
         }
-    },[status]);
+    },[status, loading]);
 
     const getStatus = async ()=>{
         try {
