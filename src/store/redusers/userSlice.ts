@@ -1,7 +1,5 @@
 import {createAction, createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {notifyRequestCreator} from "../../api/notify";
-import axios from "axios";
-import {ENTRY_POINT, ENTRY_POINT_V} from "../../constants";
 
 interface ResUser {
     access_token: string
@@ -37,7 +35,10 @@ export const signIn = createAsyncThunk(
 export const checkAuth = createAsyncThunk(
     'user/checkAuth',
     async () => {
-        const response = await axios.get(`${ENTRY_POINT}${ENTRY_POINT_V}auth/check_auth`, {withCredentials: true})
+        const response = await notifyRequestCreator(Object.assign({}, {
+            url: `${localStorage.getItem('role')}/${localStorage.getItem('id')}`,
+            method: 'get'
+        }))
         return response.data
     }
 )
@@ -68,6 +69,8 @@ const userSlice = createSlice({
             state.user = action.payload
             state.isAuth = true
             localStorage.setItem('token', action.payload.access_token)
+            localStorage.setItem('id', action.payload.id)
+            localStorage.setItem('role', action.payload.role)
         },
         [signIn.rejected.type]: (state, action: PayloadAction<any>) => {
             state.loading = false;
@@ -81,7 +84,6 @@ const userSlice = createSlice({
             state.error = null;
             state.user = action.payload
             state.isAuth = true
-            localStorage.setItem('token', action.payload.access_token)
         },
         [checkAuth.rejected.type]: (state, action: PayloadAction<any>) => {
             state.loading = false;
