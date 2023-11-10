@@ -38,7 +38,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                 id: 'idEmployee1',
                 name: 'Иванов Иван'
             },
-            note: 'Добавить примечание в параметре note'
+            message: 'Добавить примечание в параметре note'
     }
 
     const end = async (value: any) => {
@@ -92,7 +92,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                     layout="horizontal"
                                     onFinish={end}
                                     form={form}
-                                    initialValues={{note: task.note}}
+                                    initialValues={{message: task.message}}
                                     key={'Task'}
                                 >
                                     <Form.Item
@@ -149,7 +149,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                     layout="horizontal"
                                     onFinish={end}
                                     form={form}
-                                    initialValues={{note: task.note}}
+                                    initialValues={{note: task.message}}
                                     key={'Task'}
                                 >
                                     <Form.Item
@@ -161,7 +161,9 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 </Form>
                             </Col>
                         </Row>
-                    <RoutMapComponent data={[task]}></RoutMapComponent>
+                    <div style={{maxWidth: size[0], maxHeight: size[1]}}>
+                        <RoutMapComponent data={[task]}></RoutMapComponent>
+                    </div>
                 </div>
             }
         </StaticPage>
