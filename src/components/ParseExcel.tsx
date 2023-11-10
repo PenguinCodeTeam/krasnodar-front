@@ -48,6 +48,14 @@ const ParseExcel: React.FunctionComponent = () => {
     useEffect(()=>{
         if(loading) getStatus();
     },[])
+    useEffect(() => {
+        if(status==='in_progress') {
+            const interval = setInterval(() => getStatus(), 3000)
+            return () => {
+                clearInterval(interval);
+            }
+        }
+    },[status]);
 
     const getStatus = async ()=>{
         try {
