@@ -7,7 +7,7 @@ const XLSX = require('xlsx');
 
 interface DataType {
     "key": string,
-    "address": string,
+    "full_address": string,
     "connected_at": string,
     "is_delivered": boolean | string,
     "days_after_delivery": number,
@@ -16,7 +16,7 @@ interface DataType {
 }
 class dataType implements DataType {
     "key" = "string";
-    "address" = "string";
+    "full_address" = "string";
     "connected_at" = "string";
     "is_delivered" = true;
     "days_after_delivery" = 0;
@@ -48,7 +48,7 @@ const ParseExcel: React.FunctionComponent = () => {
         let newData: any = [...excel];
         let row: DataType = {
             "key": (newData.length+1).toString(),
-            "address": "",
+            "full_address": "",
             "connected_at": "",
             "is_delivered": "нет",
             "days_after_delivery": 0,
@@ -100,12 +100,12 @@ const ParseExcel: React.FunctionComponent = () => {
 
     const saveExcel = async () => {
             const response = await notifyRequestCreator(Object.assign({},
-                { data: { city: form.getFieldValue('city'), input_data: [...excel].map(el=>{
+                { data: { city: form.getFieldValue('city'), destinations: [...excel].map(el=>{
                     el.is_delivered = el.is_delivered === 'да' ;
                     delete el.key;
                             return el;
                 })}}, {
-                url: 'manager/input_data',
+                url: 'input_data',
                 method: 'post'
             }))
             return response.data

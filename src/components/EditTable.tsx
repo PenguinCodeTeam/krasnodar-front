@@ -80,7 +80,7 @@ const EditTable: React.FC<any> = ({originData, columns}) => {
 
     const edit = (record: Partial<DataType> & { key: React.Key }) => {
         form.setFieldsValue({
-            "address": "",
+            "full_address": "",
             "connected_at": "",
             "is_delivered": "нет",
             "days_after_delivery": 0,
