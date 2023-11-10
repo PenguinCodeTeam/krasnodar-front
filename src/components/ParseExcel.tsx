@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { UploadOutlined, DeliveredProcedureOutlined, NodeIndexOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import {Button, Form, Input} from 'antd';
 import EditTable from "./EditTable";
 import {notifyRequestCreator} from "../api/notify";
 const XLSX = require('xlsx');
@@ -28,6 +28,7 @@ const ParseExcel: React.FunctionComponent = () => {
     const [excel, setExcel] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [fileName, setName] = useState<string>("");
+    const [form] = Form.useForm();
     const [columns, setColumns] = useState<any>([]);
     const encodeFile=(_file: File): Promise<String> => {
         return new Promise((resolve) => {
@@ -99,7 +100,7 @@ const ParseExcel: React.FunctionComponent = () => {
 
     const saveExcel = async () => {
             const response = await notifyRequestCreator(Object.assign({},
-                { data: { input_data: [...excel].map(el=>{
+                { data: { city: form.getFieldValue('city'), input_data: [...excel].map(el=>{
                     el.is_delivered = el.is_delivered === 'да' ;
                     delete el.key;
                             return el;
@@ -112,8 +113,25 @@ const ParseExcel: React.FunctionComponent = () => {
 
     return (
             <div className={'TableTasks'}>
-                <div style={{width: '100%', margin: '0 0 20px 0', textAlign: 'right'}}>
-                    <Button icon={<NodeIndexOutlined />} onClick={()=>startTasks()}>Запустить распределение</Button><Button icon={<UploadOutlined />} onClick={($event)=>onDownloadDoc($event)}>Загрузить файл</Button><Button icon={<DeliveredProcedureOutlined />} disabled={excel.length===0} onClick={()=>saveExcel()}>Сохранить файл</Button><Button icon={<PlusOutlined />} onClick={()=>addRow()} disabled={excel.length===0}>Добавить строку</Button>
+                <div style={{width: '100%', margin: '0 0 20px 0', display: 'flex', justifyContent: 'right'}}>
+                    <Form
+                        onFinish={saveExcel}
+                        form={form}
+                        initialValues={{city: 'Краснодар'}}
+                        key={'Task'}
+                    >
+                        <Form.Item
+                            label="Город"
+                            name="city"
+                            rules={[{ required: true, message: 'Город' }]}
+                        >
+                            <Input disabled={excel.length === 0}/>
+                        </Form.Item>
+                    </Form>
+                    <Button icon={<NodeIndexOutlined />} onClick={()=>startTasks()}>Запустить распределение</Button>
+                    <Button icon={<UploadOutlined />} onClick={($event)=>onDownloadDoc($event)}>Загрузить файл</Button>
+                    <Button icon={<DeliveredProcedureOutlined />} disabled={excel.length===0} onClick={form.submit}>Сохранить файл</Button>
+                    <Button icon={<PlusOutlined />} onClick={()=>addRow()} disabled={excel.length===0}>Добавить строку</Button>
                 </div>
             {excel.length ?
                 <EditTable originData={excel} columns={columns}></EditTable>:<></>
