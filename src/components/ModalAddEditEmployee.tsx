@@ -22,11 +22,14 @@ interface Props {
 
 const ModalAddEditEmployee: React.FunctionComponent<Props> = memo((props) => {
     const {open, onClose, type, data=null, keyStr} = props
+    const initVal = Object.assign({}, data, {
+        address: data ? data?.workplace?.address : null
+    })
     const [form] = Form.useForm();
     const queryClient = useQueryClient()
     const history = useHistory();
     const url = history.location.pathname.replace('/account/', '')
-    const queryKey = url=='/employee' ? 'manager' : url
+    const queryKey = url =='/employee' ? 'employee' : url
     const mutationProduct = useMutation((data: object)=>fetchAddEditEmployee(data),{
         onSuccess: () => queryClient.invalidateQueries(queryKey)
     })
@@ -65,7 +68,7 @@ const ModalAddEditEmployee: React.FunctionComponent<Props> = memo((props) => {
                 layout="horizontal"
                 onFinish={handleOk}
                 form={form}
-                initialValues={data}
+                initialValues={initVal}
                 key={keyStr}
             >
                 <Form.Item

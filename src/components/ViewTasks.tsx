@@ -113,7 +113,9 @@ const ViewTasks: React.FunctionComponent = () => {
         {
             key: '2',
             label: 'Карты',
-            children: <RoutMapComponent data={data}></RoutMapComponent>
+            children: <div style={{width: '100vw', height: '100vh'}}>
+                <RoutMapComponent data={data}></RoutMapComponent>
+            </div>
         },
     ];
     return (
@@ -131,9 +133,12 @@ const ViewTasks: React.FunctionComponent = () => {
             }
             {
                 isMobile &&
-                <div className={'TableTasks'}>
-                   <Tabs items={items}>
-                   </Tabs>
+
+                <div className={'ViewTasks'}>
+                    <div className={'EmployeeList'}>
+                       <Tabs items={items}>
+                       </Tabs>
+                    </div>
                 </div>
             }
         </>

@@ -1,12 +1,24 @@
 import React, {useState} from "react";
 import StaticPage from "../components/StaticPage";
 import {Avatar, Button, List, Tabs, Tag, Tooltip} from "antd";
-import {DownOutlined, EditTwoTone, EyeTwoTone, MenuOutlined, UpOutlined} from "@ant-design/icons";
+import {DownOutlined, EditTwoTone, EyeTwoTone, MenuOutlined, UpOutlined, DeleteTwoTone} from "@ant-design/icons";
 import {createGetRequestService} from "../services/createRequestService";
 import {Link} from "react-router-dom";
 import {PlusOutlined} from '@ant-design/icons';
 import ModalAddEditManager from "../components/ModalAddEditManager";
 import ModalAddEditEmployee from "../components/ModalAddEditEmployee";
+import {useMutation, useQueryClient} from "react-query";
+import {notifyRequestCreator} from "../api/notify";
+
+
+
+async function fetchDeleteUser(args: any){
+    const {data} = await notifyRequestCreator(Object.assign({},{
+        url: args.url,
+        method: 'delete'
+    }))
+    return data
+}
 
 interface DataI {
     id: string,
@@ -25,10 +37,23 @@ const EmployeePage: React.FunctionComponent = () => {
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState(null);
 
+    const queryClient = useQueryClient()
+    const deleteUser = useMutation((data: object)=>fetchDeleteUser(data),{
+        onSuccess: () => queryClient.invalidateQueries(active)
+    })
+
     const selectUser = (item: any) => {
         setOpen(true)
         setSelected(item)
     }
+
+    const handleDelete = (item: any) => {
+        const dataReq = {
+            url: `${active}/${item?.id}`,
+        }
+        deleteUser.mutate(dataReq)
+    }
+
     const actionMass = (item: DataI) => {
         const actions = [
             <Tooltip title="Изменить информацию о пользователе">
@@ -42,6 +67,11 @@ const EmployeePage: React.FunctionComponent = () => {
                 </Tooltip>
             )
         }
+        actions.push(
+            <Tooltip title="Удалить пользователя">
+                <DeleteTwoTone twoToneColor="red" onClick={()=>handleDelete(item)}/>
+            </Tooltip>
+        )
         return actions
     }
     const Page1 = (dataObj: any) => {
@@ -60,7 +90,7 @@ const EmployeePage: React.FunctionComponent = () => {
                                 И
                             </Avatar>}
                             title={`${item.surname} ${item.name} ${item.patronymic}`}
-                            description={item.address}
+                            description={`г. ${item?.workplace?.city}, ${item?.workplace?.address}`}
                         />
                         <div>
                             {
