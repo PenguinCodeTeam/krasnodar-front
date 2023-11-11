@@ -23,7 +23,7 @@ const ViewTasks: React.FunctionComponent = () => {
         if (dd < 10) dd = '0' + dd;
         if (mm < 10) mm = '0' + mm;
 
-        return  dd + '-' + mm + '-' + yyyy;
+        return  yyyy + '-' + mm + '-' + dd;
     }
 
     const {user} = useAppSelector(state => state.userReducer)
@@ -35,19 +35,19 @@ const ViewTasks: React.FunctionComponent = () => {
         user_id: url,
         date: toDate()
     }
-    const {data} = createGetRequestService({url: 'tasks', method: 'get', params: filterParam});
+    const {data} = createGetRequestService({url: 'task/appointed', method: 'get', params: filterParam});
 
     const items: TabsProps['items'] = [
         {
             key: '1',
             label: 'Задачи',
-            children: <ListTasksComponent data={data}></ListTasksComponent>,
+            children: <ListTasksComponent data={data?.tasks}></ListTasksComponent>,
         },
         {
             key: '2',
             label: 'Карты',
             children: <div style={{width: '100vw', height: '100vh'}}>
-                <RoutMapComponent data={data}></RoutMapComponent>
+                <RoutMapComponent data={data?.tasks}></RoutMapComponent>
             </div>
         },
     ];
@@ -57,10 +57,10 @@ const ViewTasks: React.FunctionComponent = () => {
                 !isMobile &&
                 <div className={'ViewTasks'}>
                     <div className={'ListTasks'}>
-                        <ListTasksComponent data={data}></ListTasksComponent>
+                        <ListTasksComponent data={data?.tasks}></ListTasksComponent>
                     </div>
                     <div className={'MapTasks'}>
-                        <RoutMapComponent data={data}></RoutMapComponent>
+                        <RoutMapComponent data={data?.tasks}></RoutMapComponent>
                     </div>
                 </div>
             }
