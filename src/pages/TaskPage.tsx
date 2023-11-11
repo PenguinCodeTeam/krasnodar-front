@@ -19,8 +19,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
     }, [size])
     const id: Param = useParams();
     const [form] = Form.useForm();
-    const {data} = createGetRequestService({url: 'task/appointed/'+id.id, method: 'get'});
-
+    const {data} = createGetRequestService({url: 'task/appointed/'+id.id, method: 'get'})
     const end = async (value: any) => {
             const response = await notifyRequestCreator(Object.assign({}, {
                 data: Object.assign({}, value,{status: 'close'}),
@@ -30,13 +29,13 @@ const TaskPage: React.FunctionComponent<any> = () => {
             return response.data
     }
     return (
-        data &&
+        data ?
         <StaticPage>
             {
                 !isMobile &&
                 <div className={'ViewTasks'}>
                     <div className={'ListTasks'}>
-                        <Divider>{data.name}</Divider>
+                        <Divider>{data?.name}</Divider>
                         <Row>
                             <Col className="gutter-row" span={12}>
                                 <div>Адрес:</div>
@@ -91,7 +90,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                         </Row>
                         <Row>
                             <Col className="gutter-row" span={24}>
-                                <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} onClick={form.submit} disabled={data.status !== 'open'}>Завершить</Button>
+                                <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} onClick={form.submit} disabled={data?.status !== 'open'}>Завершить</Button>
                             </Col>
                             <Col className="gutter-row" span={24}>
                                 <Form
@@ -172,7 +171,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                     </div>
                 </div>
             }
-        </StaticPage>
+        </StaticPage>: <></>
     )
 }
 
