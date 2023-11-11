@@ -12,8 +12,8 @@ const ListTasksComponent: React.FunctionComponent<any> = ({data}) => {
             renderItem={(item: any) => (
                 <List.Item
                     actions={[
-                        <Tag color={item?.status === 'open'? 'blue' : 'green'}>
-                            {item?.status === 'open'? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'}
+                        <Tag color={item?.status === 'open'? 'blue' : item?.status === 'appointed'?'yellow': 'green'}>
+                            {item?.status === 'open'? 'ОТКРЫТО' : item?.status === 'appointed'?'РАСПРЕДЕЛЕНО':'ЗАВЕРШЕНО'}
                         </Tag>,
                         `${item?.started_at || ''} - ${item?.finished_at || ''}`
                     ]}

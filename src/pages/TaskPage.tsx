@@ -42,7 +42,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Адрес:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{data.point.address}</div>
+                                <div>{data.point.full_address}</div>
                             </Col>
                         </Row>
                         <Row>
@@ -84,8 +84,8 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Статус:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <Tag color={data?.status === 'open'? 'blue' : 'green'}>
-                                    {data?.status === 'open'? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'}
+                                <Tag color={data?.status === 'open'? 'blue' : data?.status === 'appointed'?'yellow': 'green'}>
+                                    {data?.status === 'open'? 'ОТКРЫТО' : data?.status === 'appointed'?'РАСПРЕДЕЛЕНО':'ЗАВЕРШЕНО'}
                                 </Tag>
                             </Col>
                         </Row>
@@ -125,7 +125,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Адрес:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{data.point.address}</div>
+                                <div>{data.point.full_address}</div>
                             </Col>
                         </Row>
                         <Row>
@@ -141,8 +141,8 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Статус:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <Tag color={data?.status === 'open'? 'blue' : 'green'}>
-                                    {data?.status === 'open'? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'}
+                                <Tag color={data?.status === 'open'? 'blue' : data?.status === 'appointed'?'yellow': 'green'}>
+                                    {data?.status === 'open'? 'ОТКРЫТО' : data?.status === 'appointed'?'РАСПРЕДЕЛЕНО':'ЗАВЕРШЕНО'}
                                 </Tag>
                             </Col>
                     </Row>
