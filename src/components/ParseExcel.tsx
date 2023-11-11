@@ -7,7 +7,7 @@ const XLSX = require('xlsx');
 
 interface DataType {
     "key": string,
-    "full_address": string,
+    "address": string,
     "connected_at": string,
     "is_delivered": boolean | string,
     "days_after_delivery": number,
@@ -17,7 +17,7 @@ interface DataType {
 
 class dataType implements DataType {
     "key" = "string";
-    "full_address" = "string";
+    "address" = "string";
     "connected_at" = "string";
     "is_delivered" = true;
     "days_after_delivery" = 0;
@@ -89,7 +89,7 @@ const ParseExcel: React.FunctionComponent = () => {
         let newData: any = [...excel];
         let row: DataType = {
             "key": (newData.length+1).toString(),
-            "full_address": "",
+            "address": "",
             "connected_at": "",
             "is_delivered": "нет",
             "days_after_delivery": 0,
