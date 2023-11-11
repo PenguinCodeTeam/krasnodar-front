@@ -102,14 +102,6 @@ const TaskPage: React.FunctionComponent<any> = () => {
                         </Row>
                         <Row>
                             <Col className="gutter-row" span={12}>
-                                <div>Исполнитель:</div>
-                            </Col>
-                            <Col className="gutter-row" span={12}>
-                                <div>{data.employee?.name}</div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col className="gutter-row" span={12}>
                                 <div>Статус:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
