@@ -111,6 +111,13 @@ const ModalAddEditEmployee: React.FunctionComponent<Props> = memo((props) => {
                     </Select>
                 </Form.Item>
                 <Form.Item
+                    label="Город"
+                    name="city"
+                    rules={[{ required: true, message: 'Пожалуйста введите город!' }]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
                     label="Адрес"
                     name="address"
                     rules={[{ required: true, message: 'Пожалуйста введите адрес!' }]}
