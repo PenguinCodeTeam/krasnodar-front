@@ -103,9 +103,9 @@ const TasksPage: React.FunctionComponent = () => {
             fixed: 'right',
             width: 100,
             render: (status) => {
-                const statusOpen = status == 'open'
-                const color = statusOpen ? 'blue' : 'green'
-                const text = statusOpen ? 'ОТКРЫТО' : 'ЗАВЕРШЕНО'
+                const statusOpen = status
+                const color = statusOpen === 'open' ? 'blue' : statusOpen === 'appointed'? 'yellow': 'green';
+                const text = statusOpen === 'open' ? 'ОТКРЫТО' : statusOpen === 'appointed'? 'РАСПРЕДЕЛЕНО': 'ЗАВЕРШЕНО'
                 return (
                     <Tag color={color}>
                         {text}

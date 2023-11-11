@@ -42,7 +42,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Адрес:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{data.point.full_address}</div>
+                                <div>{data?.point?.full_address}</div>
                             </Col>
                         </Row>
                         <Row>
@@ -50,7 +50,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Время:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{data.time}</div>
+                                <div>{data?.time}</div>
                             </Col>
                         </Row>
                         <Row>
@@ -59,19 +59,19 @@ const TaskPage: React.FunctionComponent<any> = () => {
                             </Col>
                             <Col className="gutter-row" span={12}>
                                 {
-                                    data.priority == 'high' &&
+                                    data?.priority == 'high' &&
                                     <Tag icon={<UpOutlined twoToneColor='#cf1322' />} color="error">
                                         Высокий
                                     </Tag>
                                 }
                                 {
-                                    data.priority == 'medium' &&
+                                    data?.priority == 'medium' &&
                                     <Tag icon={<MenuOutlined twoToneColor='#d48806' />} color="gold">
                                         Средний
                                     </Tag>
                                 }
                                 {
-                                    data.priority == 'low' &&
+                                    data?.priority == 'low' &&
 
                                     <Tag icon={<DownOutlined />} color="success">
                                         Низкий
@@ -98,14 +98,14 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                     layout="horizontal"
                                     onFinish={end}
                                     form={form}
-                                    initialValues={{message: data.message}}
+                                    initialValues={{message: data?.message}}
                                     key={'Task'}
                                 >
                                     <Form.Item
                                         name="note"
                                         rules={[{ required: false, message: 'Комментарий' }]}
                                     >
-                                        <TextArea rows={4} disabled={data.status !== 'open'}/>
+                                        <TextArea rows={4} disabled={data?.status !== 'open'}/>
                                     </Form.Item>
                                 </Form>
                             </Col>
@@ -119,13 +119,13 @@ const TaskPage: React.FunctionComponent<any> = () => {
             {
                 isMobile &&
                 <div className={'TableTasks'}>
-                        <Divider>task.name</Divider>
+                        <Divider>task?.name</Divider>
                         <Row>
                             <Col className="gutter-row" span={12}>
                                 <div>Адрес:</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{data.point.full_address}</div>
+                                <div>{data?.point?.full_address}</div>
                             </Col>
                         </Row>
                         <Row>
@@ -133,7 +133,7 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                 <div>Время (мин.):</div>
                             </Col>
                             <Col className="gutter-row" span={12}>
-                                <div>{data.time}</div>
+                                <div>{data?.time}</div>
                             </Col>
                         </Row>
                     <Row>
@@ -155,14 +155,14 @@ const TaskPage: React.FunctionComponent<any> = () => {
                                     layout="horizontal"
                                     onFinish={end}
                                     form={form}
-                                    initialValues={{note: data.message}}
+                                    initialValues={{note: data?.message}}
                                     key={'Task'}
                                 >
                                     <Form.Item
                                         name="note"
                                         rules={[{ required: false, message: 'Комментарий' }]}
                                     >
-                                        <TextArea rows={4} disabled={data.status !== 'open'}/>
+                                        <TextArea rows={4} disabled={data?.status !== 'open'}/>
                                     </Form.Item>
                                 </Form>
                             </Col>
