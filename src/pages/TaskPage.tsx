@@ -19,12 +19,12 @@ const TaskPage: React.FunctionComponent<any> = () => {
     }, [size])
     const id: Param = useParams();
     const [form] = Form.useForm();
-    const {data} = createGetRequestService({url: 'task/'+id.id, method: 'get'});
+    const {data} = createGetRequestService({url: 'task/appointed/'+id.id, method: 'get'});
 
     const end = async (value: any) => {
             const response = await notifyRequestCreator(Object.assign({}, {
                 data: Object.assign({}, value,{status: 'close'}),
-                url: 'task/'+id.id,
+                url: 'task/appointed/'+id.id,
                 method: 'put'
             }))
             return response.data
