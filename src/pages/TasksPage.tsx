@@ -35,7 +35,7 @@ const TasksPage: React.FunctionComponent = () => {
     const [date, setDate] = useState<string>(toDate())
     const {data} = createGetRequestService({url: 'task/appointed', method: 'get', params: {date: date}}, [date])
 
-    const dateFormat = 'YYYY-DD-MM';
+    const dateFormat = 'YYYY-MM-DD';
 
     const columns: ColumnsType<DataType> = [
         {
