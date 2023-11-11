@@ -58,7 +58,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     );
 };
 
-const EditTable: React.FC<any> = ({originData, columns}) => {
+const EditTable: React.FC<any> = ({originData, columns, change}) => {
     const [form] = Form.useForm();
     const [data, setData] = useState(originData);
     const [editingKey, setEditingKey] = useState('');
@@ -76,6 +76,7 @@ const EditTable: React.FC<any> = ({originData, columns}) => {
         let index = newData.findIndex((el: DataType)=>el.key === record.key);
         newData.splice(index, 1)
         setData(newData);
+        change(newData)
     }
 
     const edit = (record: Partial<DataType> & { key: React.Key }) => {
@@ -109,10 +110,12 @@ const EditTable: React.FC<any> = ({originData, columns}) => {
                 });
                 setData(newData);
                 setEditingKey('');
+                change(newData)
             } else {
                 newData.push(row);
                 setData(newData);
                 setEditingKey('');
+                change(newData)
             }
         } catch (errInfo) {
             console.log('Validate Failed:', errInfo);
