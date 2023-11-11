@@ -127,7 +127,7 @@ const TasksPage: React.FunctionComponent = () => {
                 </div>
                 <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={data?.tasks}
                     scroll={{ x: '100vw' }}
                 >
                 </Table>
