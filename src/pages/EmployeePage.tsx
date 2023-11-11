@@ -90,7 +90,7 @@ const EmployeePage: React.FunctionComponent = () => {
                                 И
                             </Avatar>}
                             title={`${item.surname} ${item.name} ${item.patronymic}`}
-                            description={`г. ${item?.workplace?.city}, ${item?.workplace?.address}`}
+                            description={item?.workplace ? `г. ${item?.workplace?.city}, ${item?.workplace?.address}` : ''}
                         />
                         <div>
                             {
