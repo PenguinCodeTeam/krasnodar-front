@@ -199,7 +199,7 @@ const ParseExcel: React.FunctionComponent = () => {
                     <Button icon={<PlusOutlined />} onClick={()=>addRow()} disabled={excel.length===0 || status==='in_progress'}>Добавить строку</Button>
                 </div>
             {excel.length ?
-                <Spin spinning={status==='in_progress'}><EditTable originData={excel} columns={columns}></EditTable></Spin>:<></>
+                <Spin spinning={status==='in_progress'}><EditTable originData={excel} columns={columns} change={(val:any)=>setExcel(val)}></EditTable></Spin>:<></>
             }
             </div>
     );
