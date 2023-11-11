@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react";
+import React, {useState} from "react";
 import StaticPage from "../components/StaticPage";
 import {DatePicker, DatePickerProps, Table, Tag} from "antd";
 import {ColumnsType} from "antd/es/table";
@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import {createGetRequestService} from "../services/createRequestService";
 import dayjs from "dayjs";
 import {UpOutlined, MenuOutlined, DownOutlined} from "@ant-design/icons";
-git
+
 interface DataType {
     key: React.Key;
     id: string;
