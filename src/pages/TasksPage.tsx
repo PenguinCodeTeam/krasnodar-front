@@ -26,7 +26,7 @@ interface DataType {
 const TasksPage: React.FunctionComponent = () => {
 
     const [date, setDate] = useState<string>(new Date().toLocaleDateString().replace(/\./g, "-"))
-   const {data} = createGetRequestService({url: 'tasks/appointed', method: 'get'})
+   const {data} = createGetRequestService({url: 'tasks/appointed', method: 'get', params: {date: date}}, [date])
 
     // const data: any[] = [
     //     {
