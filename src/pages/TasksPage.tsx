@@ -28,14 +28,14 @@ const TasksPage: React.FunctionComponent = () => {
         if (dd < 10) dd = '0' + dd;
         if (mm < 10) mm = '0' + mm;
 
-        return  dd + '-' + mm + '-' + yyyy;
+        return  yyyy + '-' + mm + '-' + dd;
     }
 
 
     const [date, setDate] = useState<string>(toDate())
     const {data} = createGetRequestService({url: 'task/appointed', method: 'get', params: {date: date}}, [date])
 
-    const dateFormat = 'DD-MM-YYYY';
+    const dateFormat = 'YYYY-DD-MM';
 
     const columns: ColumnsType<DataType> = [
         {
@@ -116,7 +116,7 @@ const TasksPage: React.FunctionComponent = () => {
         },
     ];
     const onChange: DatePickerProps['onChange'] = (date: any, dateString) => {
-        if (date) setDate(dateString.split('-').reverse().join('-'))
+        if (date) setDate(dateString)
     };
 
     return (

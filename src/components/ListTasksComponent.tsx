@@ -1,11 +1,10 @@
 import React from "react";
 import {Avatar, List, Tag, Typography} from "antd";
 import {CheckOutlined} from "@ant-design/icons";
-import {Link, useLocation} from "react-router-dom";
+import {Link} from "react-router-dom";
 const { Text } = Typography;
 
 const ListTasksComponent: React.FunctionComponent<any> = ({data}) => {
-    let { state } = useLocation();
     return (
         <List
             itemLayout="vertical"
@@ -24,7 +23,7 @@ const ListTasksComponent: React.FunctionComponent<any> = ({data}) => {
                             <CheckOutlined />
                         </Avatar>}
                         title={<Link to={`/task/${item.id}`}><Text>{item.name}</Text></Link>}
-                        description={item.point.address + " " +item.time + " "}
+                        description={item?.point?.address + " " +item?.time + " "}
                     />
                 </List.Item>
             )}
