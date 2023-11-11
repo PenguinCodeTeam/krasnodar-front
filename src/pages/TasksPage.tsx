@@ -6,11 +6,7 @@ import {Link} from "react-router-dom";
 import {createGetRequestService} from "../services/createRequestService";
 import dayjs from "dayjs";
 import {UpOutlined, MenuOutlined, DownOutlined} from "@ant-design/icons";
-
-interface EmployeeI {
-    id: string;
-    name: string;
-}
+git
 interface DataType {
     key: React.Key;
     id: string;
@@ -19,118 +15,27 @@ interface DataType {
     priority: string;
     time: number;
     point: object;
-    date: string;
-    employee: EmployeeI;
+    created_date: string;
 }
 
 const TasksPage: React.FunctionComponent = () => {
+    const toDate = (date?:any)=>{
+        const today = date || new Date();
+        const yyyy = today.getFullYear();
+        let mm: string | number = today.getMonth() + 1;
+        let dd: string | number = today.getDate();
 
-    const [date, setDate] = useState<string>(new Date().toLocaleDateString().replace(/\./g, "-"))
-   const {data} = createGetRequestService({url: 'tasks/appointed', method: 'get', params: {date: date}}, [date])
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
 
-    // const data: any[] = [
-    //     {
-    //         key: 'id1',
-    //         id: 'id1',
-    //         status: 'open',
-    //         name: 'Задача1',
-    //         priority: 'medium',
-    //         time: 34,
-    //         point: {
-    //             lat: '123',
-    //             lng: '123',
-    //         },
-    //         date: '12.03.12',
-    //         employee: {
-    //             id: 'idEmployee1',
-    //             name: 'Иванов Иван'
-    //         },
-    //     },
-    //     {
-    //         key: 'id2',
-    //         id: 'id2',
-    //         status: 'open',
-    //         name: 'Задача2',
-    //         priority: 'high',
-    //         time: 32,
-    //         point: {
-    //             lat: '123',
-    //             lng: '123',
-    //         },
-    //         date: '12.05.12',
-    //         employee: {
-    //             id: 'idEmployee1',
-    //             name: 'Иванов Иван'
-    //         },
-    //     },
-    //     {
-    //         key: 'id3',
-    //         id: 'id3',
-    //         status: 'open',
-    //         name: 'Задача3',
-    //         priority: 'low',
-    //         time: 32,
-    //         point: {
-    //             lat: '123',
-    //             lng: '123',
-    //         },
-    //         date: '12.03.12',
-    //         employee: {
-    //             id: 'idEmployee1',
-    //             name: 'Иванов Иван'
-    //         },
-    //     },
-    //     {
-    //         key: 'id4',
-    //         id: 'id4',
-    //         status: 'open',
-    //         name: 'Задача4',
-    //         priority: 'medium',
-    //         time: 32,
-    //         point: {
-    //             lat: '123',
-    //             lng: '123',
-    //         },
-    //         date: '12.04.12',
-    //         employee: {
-    //             id: 'idEmployee2',
-    //             name: 'Алексеев Алексей'
-    //         },
-    //     },
-    //     {
-    //         key: 'id5',
-    //         id: 'id5',
-    //         status: 'close',
-    //         name: 'Задача5',
-    //         priority: 'high',
-    //         time: 32,
-    //         point: {
-    //             lat: '123',
-    //             lng: '123',
-    //         },
-    //         date: '12.05.12',
-    //         employee: {
-    //             id: 'idEmployee2',
-    //             name: 'Алексеев Алексей'
-    //         },
-    //     },
-    // ]
+        return  dd + '-' + mm + '-' + yyyy;
+    }
+
+
+    const [date, setDate] = useState<string>(toDate())
+    const {data} = createGetRequestService({url: 'task/appointed', method: 'get', params: {date: date}}, [date])
+
     const dateFormat = 'DD-MM-YYYY';
-
-    const filterEmployee = useMemo(() => {
-        const filterEmployee:any = []
-        const massEmployee:any[] = []
-        data?.forEach((item: DataType) => {
-            if (!massEmployee.includes(item.employee.name)) {
-                massEmployee.push(item.employee.name)
-                filterEmployee.push({
-                    text: item.employee.name,
-                    value: item.employee.name,
-                })
-            }
-        })
-        return filterEmployee
-    }, [data])
 
     const columns: ColumnsType<DataType> = [
         {
@@ -176,19 +81,7 @@ const TasksPage: React.FunctionComponent = () => {
             },
             sorter: (a, b) => a.priority.localeCompare(b.priority)
         },
-        {
-            title: 'Исполнитель',
-            dataIndex: 'employee',
-            key: 'employee',
-            width: 200,
-            filterSearch: true,
-            render: (employee) => {
-                return <Link to={`/employee/${employee?.id}`}>{employee?.name}</Link>
-            },
-            filters: filterEmployee,
-            onFilter: (value: any, record) => record.employee.name.indexOf(value) === 0,
-            sorter: (a, b) => a.employee.name.localeCompare(b.employee.name)
-        },
+
         {
             title: 'Время выполнения',
             dataIndex: 'time',
@@ -198,10 +91,10 @@ const TasksPage: React.FunctionComponent = () => {
         },
         {
             title: 'Дата выполнения',
-            dataIndex: 'date',
-            key: 'date',
+            dataIndex: 'created_date',
+            key: 'created_date',
             width: 150,
-            sorter: (a, b) => a.date.localeCompare(b.date)
+            sorter: (a, b) => a.created_date.localeCompare(b.created_date)
         },
         {
             title: 'Статус',

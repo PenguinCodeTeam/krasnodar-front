@@ -7,7 +7,7 @@ const RoutMapComponent: React.FunctionComponent<any> = ({data}) => {
         center: [45.035765, 38.975605],
         zoom: 12,
     };
-    const addresses = data.map((el:any)=>el.point.address)
+    const addresses = data.map((el:any)=>el.point.full_address)
 
     const addRoute = (ymaps: any) => {
         const multiRoute = new ymaps.multiRouter.MultiRoute(

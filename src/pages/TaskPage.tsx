@@ -1,6 +1,5 @@
 import React, {useMemo, useState} from "react";
-import MapComponent from "../components/MapComponent";
-import {Button, Col, Divider, Form, Row, Tabs, Tag, Typography} from "antd";
+import {Button, Col, Divider, Form, Row, Tag } from "antd";
 import {CheckCircleTwoTone, DownOutlined, MenuOutlined, UpOutlined} from '@ant-design/icons';
 import {notifyRequestCreator} from "../api/notify";
 import TextArea from "antd/es/input/TextArea";
@@ -21,26 +20,6 @@ const TaskPage: React.FunctionComponent<any> = () => {
     const id: Param = useParams();
     const [form] = Form.useForm();
     const {data} = createGetRequestService({url: 'task/'+id.id, method: 'get'});
-    // const task =
-    //     {
-    //         key: 'id2',
-    //         id: 'id2',
-    //         status: 'open',
-    //         name: 'Задача2',
-    //         priority: 'high',
-    //         time: 32,
-    //         point: {
-    //             lat: '123',
-    //             lng: '123',
-    //             address: "г. Краснодар, ул. им. Атарбекова, д. 24"
-    //         },
-    //         date: '12.05.12',
-    //         employee: {
-    //             id: 'idEmployee1',
-    //             name: 'Иванов Иван'
-    //         },
-    //         message: 'Добавить примечание в параметре note'
-    // }
 
     const end = async (value: any) => {
             const response = await notifyRequestCreator(Object.assign({}, {

@@ -27,9 +27,7 @@ class dataType implements DataType {
 
 const ParseExcel: React.FunctionComponent = () => {
     const [excel, setExcel] = useState<any[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [fileName, setName] = useState<string>("");
-    const [status, setStatus] = useState<string>("in_progress");
+    const [status, setStatus] = useState<string>("default");
     const [form] = Form.useForm();
     const [columns, setColumns] = useState<any>([]);
     const encodeFile=(_file: File): Promise<String> => {
@@ -46,13 +44,13 @@ const ParseExcel: React.FunctionComponent = () => {
         });
     }
     useEffect(() => {
-        if(status==='in_progress' || loading) {
+        if(status==='in_progress' || status==='default') {
             const interval = setInterval(() => getStatus(), 3000)
             return () => {
                 clearInterval(interval);
             }
         }
-    },[status, loading]);
+    },[]);
 
     const getStatus = async ()=>{
         try {
@@ -61,11 +59,9 @@ const ParseExcel: React.FunctionComponent = () => {
                     url: 'distribution',
                     method: 'get'
                 }))
-            if(!response.data.status as any === 'in_progress')setLoading(true)
             setStatus(response.data.status)
             return response.data
         }catch (e: any) {
-            setLoading(false)
             setStatus('error')
             return e.response.data.error
         }
@@ -81,11 +77,9 @@ const ParseExcel: React.FunctionComponent = () => {
                     url: 'distribution',
                     method: 'post'
                 }))
-            setLoading(true)
             setStatus(response.data.status)
             return response.data
         }catch (e: any) {
-            setLoading(false)
             setStatus('error')
             return e.response.data.error
         }
@@ -111,12 +105,10 @@ const ParseExcel: React.FunctionComponent = () => {
         _shadow_input.type = 'file';
         if (accept) _shadow_input.accept = accept;
         _shadow_input.onchange = (e:any) => {
-            let _file = e.target.files[0];
             encodeFile(e?.target?.files[0]).then((event)=>{
                 let workbook = XLSX.read(event, {});
                 const ws = workbook.Sheets[workbook.SheetNames[0]]; // get the first worksheet
                 const data: any[] = XLSX.utils.sheet_to_json(ws);
-                setName(_file.name);
                 let _cols:any=[];
                 type TableKeys = Array<keyof DataType>;
                 const keyOfData: TableKeys =
@@ -146,7 +138,6 @@ const ParseExcel: React.FunctionComponent = () => {
     }
 
     const saveExcel = async () => {
-        setLoading(true)
         try {
             const response = await notifyRequestCreator(Object.assign({},
                 {
@@ -161,11 +152,9 @@ const ParseExcel: React.FunctionComponent = () => {
                     url: 'input_data',
                     method: 'post'
                 }))
-            setLoading(true)
             setStatus(response.data.status);
             return response.data
         }catch (e: any) {
-            setLoading(false)
             setStatus('error')
             return e.response.data.error
         }
@@ -201,16 +190,16 @@ const ParseExcel: React.FunctionComponent = () => {
                             name="city"
                             rules={[{ required: true, message: 'Город' }]}
                         >
-                            <Input disabled={excel.length === 0 || loading}/>
+                            <Input disabled={excel.length === 0 || status==='in_progress'}/>
                         </Form.Item>
                     </Form>
-                    <Button icon={<NodeIndexOutlined />} onClick={()=>startTasks()} disabled={loading}>Запустить распределение</Button>
-                    <Button icon={<UploadOutlined />} disabled={loading} onClick={($event)=>onDownloadDoc($event)}>Загрузить файл</Button>
-                    <Button icon={<DeliveredProcedureOutlined />} disabled={excel.length===0 || loading} onClick={form.submit}>Сохранить файл</Button>
-                    <Button icon={<PlusOutlined />} onClick={()=>addRow()} disabled={excel.length===0 || loading}>Добавить строку</Button>
+                    <Button icon={<NodeIndexOutlined />} onClick={()=>startTasks()} disabled={status==='in_progress'}>Запустить распределение</Button>
+                    <Button icon={<UploadOutlined />} disabled={status==='in_progress'} onClick={($event)=>onDownloadDoc($event)}>Загрузить файл</Button>
+                    <Button icon={<DeliveredProcedureOutlined />} disabled={excel.length===0 || status==='in_progress'} onClick={form.submit}>Сохранить файл</Button>
+                    <Button icon={<PlusOutlined />} onClick={()=>addRow()} disabled={excel.length===0 || status==='in_progress'}>Добавить строку</Button>
                 </div>
             {excel.length ?
-                <Spin spinning={loading}><EditTable originData={excel} columns={columns}></EditTable></Spin>:<></>
+                <Spin spinning={status==='in_progress'}><EditTable originData={excel} columns={columns}></EditTable></Spin>:<></>
             }
             </div>
     );
