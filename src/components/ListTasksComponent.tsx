@@ -23,7 +23,7 @@ const ListTasksComponent: React.FunctionComponent<any> = ({data}) => {
                             <CheckOutlined />
                         </Avatar>}
                         title={<Link to={`/task/${item.id}`}><Text>{item.name}</Text></Link>}
-                        description={item?.point?.address + " " +item?.time + " "}
+                        description={item?.point?.full_address + " " +item?.time + " "}
                     />
                 </List.Item>
             )}
