@@ -15,7 +15,7 @@ interface DataType {
     priority: string;
     time: number;
     point: object;
-    created_date: string;
+    date: string;
 }
 
 
@@ -96,7 +96,7 @@ const TasksPage: React.FunctionComponent = () => {
             dataIndex: 'date',
             key: 'date',
             width: 150,
-            sorter: (a, b) => a.created_date.localeCompare(b.created_date)
+            sorter: (a, b) => a.date.localeCompare(b.date)
         },
         {
             title: 'Статус',
