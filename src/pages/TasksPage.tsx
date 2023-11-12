@@ -18,6 +18,25 @@ interface DataType {
     created_date: string;
 }
 
+const data: any = { tasks: [{
+        "id": "cced1d42-53c3-4d01-a24c-bcc6c644f864",
+        "status": "appointed",
+        "name": "Обучение агента",
+        "task_type_id": 2,
+        "priority": "medium",
+        "time": 120,
+        "point": {
+            "id": "585d810b-fb7a-4ac3-9144-7f5c2ccc93d4",
+            "full_address": "г. Краснодар, ул. им. Горького, д. 128"
+        },
+        "created_date": "2023-11-11",
+        "date": "2023-11-11",
+        "task_number": 2,
+        "started_at": "11:06",
+        "finished_at": "13:18",
+        "message": ""
+    }]};
+
 const TasksPage: React.FunctionComponent = () => {
     const toDate = (date?:any)=>{
         const today = date || new Date();
@@ -33,7 +52,7 @@ const TasksPage: React.FunctionComponent = () => {
 
 
     const [date, setDate] = useState<string>(toDate())
-    const {data} = createGetRequestService({url: 'task/appointed', method: 'get', params: {date: date}}, [date])
+   // const {data} = createGetRequestService({url: 'task/appointed', method: 'get', params: {date: date}}, [date])
 
     const dateFormat = 'YYYY-MM-DD';
 
